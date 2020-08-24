@@ -1,0 +1,732 @@
+---
+title: "Adj endorsement pilot"
+author: "Polina Tsvilodub"
+date: "08 11 2019"
+output: github_document
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Load libraries.
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(tidyverse)
+library(jsonlite)
+library(tidyboot)
+library(tidytext)
+library(lme4)
+library(ggthemes)
+library(forcats)
+library(brms)
+library(stringr)
+theme_set(theme_few())
+```
+
+
+``` {r}
+# function to insert plural NP
+insert_plural_np = function(np, superordinate) {
+   if (np %in% c("piece of chocolate" )) {
+    np_pl = "chocolates"
+  } else if (np %in% c("piece of chalk" )) {
+    np_pl = "chalks"  
+  } else if( np %in% c("story")) {
+    np_pl = "stories" 
+  } else if( np %in% c("daisy")) {
+    np_pl = "daisies"   
+  } else if( np %in% c("library")) {
+    np_pl = "libraries"   
+  } else if( np %in% c("party")) {
+    np_pl = "parties" 
+  } else if( np %in% c("bush")) {
+    np_pl = "bushes"  
+  } else if( np %in% c("finch")) {
+    np_pl = "finches"    
+  } else if( np %in% c("pansy")) {
+    np_pl = "pansies"
+  } else if ( np %in% c("documentary")) {
+    np_pl = "documentaries"   
+  } else if ( np %in% c("pantry")) {
+    np_pl = "pantries"
+  } else if ( np %in% c("choral concert")) {
+    np_pl = "choirs"  
+  } else if( np %in% c("elderly person")) {
+    np_pl = "elderly people"   
+  } else if( np %in% c("mouse")) {
+    np_pl = "mice"
+  } else if( np %in% c("church")) {
+    np_pl = "churches"  
+  } else if( np %in% c("tile")) {
+    np_pl = "tile floors"
+  } else if( np %in% c("wood") & (superordinate == "floors")) {
+    np_pl = "wood floors"  
+  } else if( np %in% c("carpet") & (superordinate == "floors")) {
+    np_pl = "carpet floors"    
+  } else if( np %in% c("summer")) {
+    np_pl = "summer days" 
+  } else if( np %in% c("fall")) {
+    np_pl = "fall days"   
+  } else if( np %in% c("winter")) {
+    np_pl = "winter days"   
+  } else if( np %in% c("couch")) {
+    np_pl = "couches"  
+  } else if( np %in% c("tomato")) {
+    np_pl = "tomatoes"
+  } else if( np %in% c("jolly rancher")) {
+    np_pl = "jollies"
+  } else if( np %in% c("peach")) {
+    np_pl = "peaches"
+  } else if( np %in% c("city")) {
+    np_pl = "cities"   
+  } else if( np %in% c("auditorium")) {
+    np_pl = "auditoria"
+  } else if (np %in% c("bottle of top-shelf liquor")) {
+    np_pl = "liquors"
+  } else if (np %in% c("six-pack of beer")) {
+    np_pl = "beers"
+  } else if (np %in% c( "bottle of wine")) {
+    np_pl = "wine bottles"
+  } else if (np %in% c( "bush" )) {
+    np_pl = "bushes"
+  } else if (np %in% c( "mouse den" )) {
+    np_pl = "mouse holes"
+  } else if (np %in% c( "sprinting race" )) {
+    np_pl = "sprints"  
+  } else if(np %in% c( "child")) {
+    np_pl = "children"
+  } else if (np %in% c("baby")) {
+    np_pl = "babies"
+  } else if (np %in% c("platinum")) {
+    np_pl = "platinum statue"
+  } else if( np %in% c("bronze")) {
+    np_pl = "bronze statues"   
+  } else if( np %in% c("pick-up truck")) {
+    np_pl = "pick up trucks"     
+  } else if ((np %in% c("plastic")) & (superordinate == "bracelets")) {
+    np_pl = "plastic bracelets"
+  } else if( np %in% c("gold")) {
+    np_pl = "gold bracelets"
+  } else if( np %in% c("metal")) {
+    np_pl = "metal bracelets"  
+  } else if ((np %in% c("plastic")) & (superordinate == "statues")) {
+    np_pl = "plastic statues"  
+  } else if (np %in% c("wool", "wood", "fish", "ice cream", "garlic", "saffron", "coffee", "raspberries",
+                       "boysenberries",
+                "strawberries", "sneakers", "chicken", "boots", "tuna", "pork", "sandals", "plastic", "instant pot"))  {
+    np_pl = np # the items left singular
+    
+  } else {
+    np_pl = paste(np, "s", sep="")
+  }
+  return (np_pl)
+}
+```
+
+## Results
+
+
+```{r load data from json, eval = F}
+data.path <- "../../mturk/adjective-endorsement-prereg-final/production-results/"
+result.files <- list.files(data.path, pattern="json")
+
+df.subject <- data.frame()
+df.trials <- data.frame()
+df.attention <- data.frame()
+for (result_file in result.files) {
+  result_json = fromJSON(paste(data.path, result_file, sep ="/"))
+  worker.id =  result_json$answers$trials$worker_id
+  #condition = result_json$answers$condition
+  
+  # df.attention = bind_rows(
+  #   df.attention, 
+  #   data.frame(result_json$answers$catch_trials) %>%
+  #     mutate(workerid = worker.id)
+  # )
+  #   
+  df.subject = bind_rows(
+    df.subject, 
+    data.frame(result_json$answers$trials) %>% 
+      distinct(age, sex, education, languages, enjoyment, problems, fairprice, comments, experiment_id) %>%
+      mutate(workerid = worker.id)
+  )
+    
+  df.trials = bind_rows(
+    df.trials, 
+    data.frame(result_json$answers$trials$trials) %>%
+      mutate(workerid = worker.id)
+  )
+}
+
+df.trials %>%
+  mutate(workerid = factor(workerid),
+         workerid = paste("worker_", as.character(str_pad(as.numeric(workerid), 3, pad = "0")), sep = "")) -> df.trials
+
+df.trials %>%
+  group_by(workerid) %>%
+  count() %>%
+  group_by(n) %>%
+  count()
+
+
+df.trials %>%
+  group_by(workerid) %>%
+  count() %>%
+  filter(n > 58) %>%
+  pull(workerid) -> multiple.submission.workers
+
+df.trials %>%
+  mutate(rownum = row_number()) %>%
+  group_by(trial_name, workerid, trial_number) %>%
+  summarize(rownum = first(rownum)) -> rows.to.keep
+
+df.trials %>%
+  mutate(rownum = row_number()) %>%
+  left_join(., rows.to.keep %>% mutate(keep = c(T))) %>%
+  filter(keep == T)  -> df.trials.first_submit
+
+  # %>%
+  # group_by(workerid) %>%
+  # count() %>%
+  # group_by(n) %>%
+  # count()
+  # 
+
+
+
+df.trials.first_submit %>%
+  distinct(workerid) %>%
+  count()
+
+
+df.attention <- df.trials.first_submit %>% 
+  filter(trial_name == "memory_check_catch") %>%
+  select(workerid, trial_name, trial_number, RT, check_index, property, tested_on, response, correct)
+
+df.trials.main <- df.trials.first_submit %>% 
+  filter(trial_name == "adj_endorsement_both") %>%
+  select(workerid, trial_name, trial_number, RT, context, question, sentence_1, sentence_2, condition_1, condition_2, 
+         item_cond, item, stim_id, degree, adj_positive, adj_negative, superordinate,  response1, response2)
+
+write_csv(df.trials.main, "../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-trials.csv")
+write_csv(df.attention, "../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-catch_trials.csv")
+write_csv(df.subject, "../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-subject_information.csv")
+```
+
+
+```{r load data from csv}
+df.trials.first_submit <- read_csv("../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-trials.csv")
+df.subject <- read_csv("../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-subject_information.csv")
+df.attention <- read_csv("../../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-final-catch_trials.csv")
+```
+
+### Exclusions
+
+```{r}
+df.trials.mem_correct <- df.attention %>%
+  group_by(workerid) %>%
+  summarize(n_correct = sum(correct))
+
+df.trials.mem_correct %>%
+  group_by(n_correct) %>%
+  count()
+
+
+df.mem_fail <- df.trials.mem_correct %>%
+  filter(n_correct < 7) %>%
+  pull(workerid)
+
+# processed CC elicitation data for adding missing np_expectations
+df.mode.final <- read_csv('../../data/class-elicitation-prereg-final/full-classified-data-w-freqs.csv')
+
+df.trials.filtered <- df.trials.first_submit %>%
+  filter(!(workerid %in% df.mem_fail)) %>%
+  filter(trial_name == "adj_endorsement_both") %>%
+  rename(np_expectations =  item_cond) %>%
+ # some of the item_conds were not recorded; they can be read from the CC elicitation data (df.mode final is the final classified full data set)
+  rowwise() %>%
+  mutate(
+    superordinate = ifelse(superordinate == "scripts", "writing tools", superordinate),
+     superordinate = ifelse(superordinate == "doorways", "doors", superordinate)
+  )
+
+df.trials.filtered1 <- df.trials.filtered %>%  
+  left_join(., df.mode.final %>% distinct(stim_id, superordinate = superordinate_pl, item = NP_sg, np_exp_cc = np_expectations)) %>%
+  rowwise() %>%
+  mutate(
+    np_expectations_new = ifelse(is.na(np_expectations), np_exp_cc, np_expectations)
+  ) %>%
+  select(-np_expectations, -np_exp_cc) %>%
+  rename(np_expectations = np_expectations_new) %>% 
+  mutate(
+    np_expectations = ifelse(item == "opera", "high", np_expectations),
+    np_expectations = ifelse(item == "podcast episode", "medium", np_expectations),
+    np_expectations = ifelse(item == "song", "low", np_expectations),
+    np_expectations = ifelse(item == "sprinting race", "low", np_expectations),
+    np_expectations = ifelse(item == "relay race", "medium", np_expectations),
+    np_expectations = ifelse(item == "triathlon race", "high", np_expectations)
+  )
+# write_csv(df.trials.filtered1, path = "../models/data/adj-endorsement_filtered.csv")
+
+length(df.mem_fail)
+length(unique(df.trials.filtered1$workerid))
+```
+
+
+```{r}
+df.trials.filtered1 %>%
+  group_by(degree, superordinate, item) %>%
+  count()
+```
+
+
+```{r}
+df.trials.filtered1 %>%
+  rowwise() %>%
+  mutate(
+    response_pos = as.numeric(
+        ifelse(condition_1 == "adj_positive", response1, response2)
+      ),
+    response_neg = as.numeric(
+      ifelse(condition_1 == "adj_negative", response1, response2)
+    )
+  ) %>%
+  mutate(degree = ifelse(degree == "length_duration", "length", degree)) %>%
+  select(workerid, stim_id, response_pos, response_neg, degree, superordinate, 
+         item, np_expectations) %>%
+  gather(key, val, response_pos, response_neg, -degree, -superordinate, -stim_id, 
+         -item, -np_expectations)  %>%
+  mutate(key = gsub('response_', "", key),
+         np_expectations = factor(np_expectations,
+                               levels = c("low", "medium", "high")),
+         key = factor(key, levels = c("neg", "pos"), labels = c("negative", "positive"))) %>%
+  rename(adj_polarity = key, NP_sg = item, superordinate_pl = superordinate) -> df.trials.tidy
+
+#write_csv(df.trials.tidy, "../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-trials-tidy.csv")
+
+glimpse(df.trials.tidy)
+
+df.trial.tidy.w.freq <- df.trials.tidy %>% rowwise() %>%
+  mutate(
+    NP_pl = insert_plural_np(tolower(NP_sg), superordinate_pl),
+    superordinate_pl = ifelse(superordinate_pl == "venue", "venues", superordinate_pl),
+    superordinate_pl = ifelse(superordinate_pl == "dens", "animal dens", superordinate_pl),
+    superordinate_pl = ifelse(superordinate_pl == "audio recordings", "audios", superordinate_pl)
+  ) 
+
+df.frequencies <- read_csv('../../data/class-elicitation-prereg-final/class-elicitation-final-plural_frequencies.csv')
+
+df.trial.tidy.w.freq <- df.trial.tidy.w.freq %>%
+  left_join(., df.frequencies, by = c("NP_pl" ="NPs")) %>% # add subordinate frequencies
+  left_join(., df.frequencies, by=c("superordinate_pl"="NPs")) %>%  # add superordinate frequencies
+  select(workerid, stim_id, degree, superordinate_pl, NP_sg, NP_pl, np_expectations, adj_polarity, val, subFreq = Frequencies.x, superFreq = Frequencies.y)
+
+#write_csv(df.trial.tidy.w.freq, '../data/adjective-endorsement-prereg-final/adjective-endorsement-prereg-trials-w-freqs.csv')
+```
+
+
+# Viz
+
+```{r figCollapseItems}
+d.tidy.adj.bs <- df.trials.tidy %>% 
+  group_by(np_expectations, adj_polarity) %>%
+  tidyboot_mean(column = val)
+
+
+d.tidy.adj.bs.item <- df.trials.tidy %>%
+  group_by(stim_id, degree, superordinate_pl, np_expectations, 
+           NP_sg, adj_polarity) %>%
+  tidyboot_mean(column = val)
+
+
+d.tidy.adj.bs %>%
+  ungroup() %>%
+  mutate(
+    np_expectations = gsub('\"', "", np_expectations),
+    adj_polarity = gsub('\"', "", adj_polarity),
+    np_expectations = factor(np_expectations,
+      levels = c("low", "medium", "high")
+    )
+  ) -> d.tidy.adj.bs.refac
+
+d.tidy.adj.bs.item %>%
+  ungroup() %>%
+  mutate(unique_id = paste(stim_id, np_expectations, sep = "-")) %>%
+  mutate(np_expectations = factor(np_expectations,
+    levels = c("low", "medium", "high")
+  )) -> d.tidy.adj.bs.item.refac
+
+
+set.seed(20202)
+
+d.tidy.adj.bs.item.refac %>%
+  left_join(
+    .,
+    data.frame(
+      unique_id = unique(d.tidy.adj.bs.item.refac$unique_id),
+      jitterVal = runif(270, min = -0.07, max = 0.07)
+    )
+  ) %>%
+  mutate(
+    jitterVal = jitterVal + ifelse(adj_polarity == "positive", 0.2, -0.2)
+  ) %>%
+  ggplot(
+    .,
+    aes(
+      x = as.numeric(np_expectations) + jitterVal, y = mean,
+      ymin = ci_lower, ymax = ci_upper, fill = adj_polarity
+    )
+  ) +
+  geom_col(
+    data = d.tidy.adj.bs.refac,
+    aes(
+      x = np_expectations, y = mean,
+      ymin = ci_lower, ymax = ci_upper, fill = adj_polarity
+    ),
+    position = position_dodge(0.8), width = 0.8, alpha = 0.6, color = "black", size = 1
+  ) +
+  geom_point( # position = position_dodge(0.8),
+    # position = position_jitterdodge(jitter.width = 0.2, jitter.height = 0),
+    # data = d.tidy.phrase.specificMarking.bs.item,
+    # aes( y = mean, fill = adj_polarity, x = np_expectations),
+    shape = 21, alpha = 0.8
+  ) +
+  geom_path(aes(group = unique_id),
+    # position = position_dodge(0.8),
+    alpha = 0.15
+  ) +
+  geom_linerange(
+    data = d.tidy.adj.bs.refac,
+    aes(
+      x = np_expectations, y = mean,
+      ymin = ci_lower, ymax = ci_upper
+    ),
+    position = position_dodge(0.8), color = "black", size = 1.5
+  ) +
+  scale_fill_brewer(palette = "Set3") +
+  theme( # axis.text.x = element_text(angle = 45, hjust = 1.0, vjust = 1),
+    # axis.title.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.line = element_line(colour = "black")
+  ) +
+  guides(fill = guide_legend(title = "Adjective polarity", reverse = T)) +
+  # theme_black()+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+  ylab("Proportion Adjective Endorsement") +
+  xlab("General Expectations of Subordinate Category")
+
+
+ggsave(
+  filename = "../../writing/paper/figs/bars_adj_finalExpt_prereg_bars_syncDodge.pdf",
+  width = 6, height = 4
+)
+
+```
+
+```{r}
+d.tidy.adj.bs.item.refac %>%
+  select(stim_id, unique_id, np_expectations, adj_polarity, mean) %>%
+  spread(adj_polarity, mean) %>%
+  filter(np_expectations == "high") %>%
+  filter(negative > positive)
+```
+```{r}
+d.tidy.adj.bs.item.refac %>% 
+  filter(stim_id == 83) #38
+```
+
+stim83, wool: judged more light than heavy
+stim38, owl: judged more loud than quiet
+
+# BRM model
+
+```{r}
+df.trials.tidy.refac <- df.trials.tidy %>%
+  mutate(
+    adj_polarity = factor(adj_polarity,
+      levels = c("negative", "positive")
+    ),
+    np_expectations = factor(np_expectations,
+      levels = c("medium", "low", "high")
+    )
+  )
+
+df.trials.tidy.refac$stim_id <- as.factor(df.trials.tidy.refac$stim_id)
+df.trials.tidy.refac$workerid <- as.factor(df.trials.tidy.refac$workerid)
+
+contrasts(df.trials.tidy.refac$adj_polarity) <- c(-1 / 2, 1 / 2)
+
+rs.glm.brm.adj <- brm(
+  formula = val ~ np_expectations * adj_polarity +
+    (1 + np_expectations * adj_polarity | workerid) +
+    (1 + np_expectations * adj_polarity | stim_id),
+  family = bernoulli(), chains = 4, cores = 4, 
+  iter = 10000,
+  seed = 2020,
+  data = df.trials.tidy.refac,
+  file = "rs_brm_adj_glm_exact-match_4chain_10k_2"
+)
+
+contrasts(d.tidy.clean.responses.fac$adj_polarity)
+contrasts(d.tidy.clean.responses.fac$np_expectations)
+
+rs.glm.brm.adj.summary <- summary(rs.glm.brm.adj)
+
+rs.glm.brm.adj.summary
+```
+
+
+### compute marginal posteriors
+
+```{r}
+rs.glm.brm.adj.betas.samples <- brms::posterior_samples(rs.glm.brm.adj, add_chain = T) %>% 
+  select(starts_with("b_")) %>%
+  rename(
+    intercept = b_Intercept,
+    nplow = b_np_expectationslow,
+    nphigh = b_np_expectationshigh,
+    adjpol = b_adj_polarity1,
+    adjpol_nplow = `b_np_expectationslow:adj_polarity1`,
+    adjpol_nphigh = `b_np_expectationshigh:adj_polarity1`
+  ) %>%
+  mutate(
+    highneg_highpos = -adjpol - adjpol_nphigh,
+    lowneg_lowpos = -adjpol - adjpol_nplow,
+    lowneg_highneg = nplow - nphigh - 
+      0.5 * adjpol_nplow + 0.5 * adjpol_nphigh,
+    lowpos_highpos = nplow - nphigh + 
+      0.5 * adjpol_nplow - 0.5 * adjpol_nphigh,
+    lowneg_highpos = -adjpol + nplow - nphigh - 
+      0.5 * adjpol_nplow - 0.5 * adjpol_nphigh,
+    lowpos_highneg = adjpol + nplow - nphigh + 
+      0.5 * adjpol_nplow + 0.5 * adjpol_nphigh
+  ) 
+
+write_csv(rs.glm.brm.adj.betas.samples,
+          path = "../../writing/paper/cached_results/rs_brm_adj_glm_4chain_10k_samples.csv")
+
+
+
+rs.glm.brm.adj.betas.samples %>%
+  gather(key, val) %>% 
+  group_by(key) %>%
+  summarize(
+    'l95' = quantile(val, probs = c(0.025, 0.975))[[1]],
+    'mean'  = mean(val),
+    'u95' = quantile(val, probs = c(0.025, 0.975))[[2]],
+    prob_gt_0 = mean(val > 0)*100,
+    prob_lt_0 = mean(val < 0)*100
+  ) -> rs.glm.brm.adj.full.contrasts
+
+write_csv(rs.glm.brm.adj.full.contrasts,
+          path = "../../writing/paper/csv_data_4_tex/expt_brm_adj_contrasts_10k.csv")
+```
+
+
+## Look at items with n>=35
+
+```{r}
+df.trials.tidy %>%
+  group_by(stim_id, degree, superordinate, item, np_expectations, key) %>%
+  count() -> d.item.count
+
+d.item.n35 <- d.item.count %>%
+  filter(n >= 35) %>%
+  mutate(unique_id = paste(stim_id, np_expectations, key, sep = "_")) %>%
+  pull(unique_id)
+
+
+d.item.n35.bs <- df.trials.tidy %>%
+  mutate(unique_id = paste(stim_id, np_expectations, key, sep = "_")) %>%
+  filter(unique_id %in% d.item.n35) %>%
+  group_by(stim_id, np_expectations, key) %>%
+  summarize(n_sum = sum(val), prop = mean(val), n = n())
+
+d.item.n35.bs %>%
+  ungroup() %>%
+  rowwise() %>%
+  filter(prop > 0.94 || prop < 0.06 || n >= 57) %>%
+  select(-prop) %>%
+  #filter((n - n_sum) > (n - 2) || (n - n_sum) < 2) %>%
+  spread(key, n_sum) %>%
+  drop_na() %>%
+  rename(neg_adj = response_neg, pos_adj = response_pos) %>%
+  jsonlite::toJSON(., pretty = T) %>%
+  write(., file = "../experiments/adj-endorsement-exp/omitted_stims.json")
+```
+
+error bars computed by item.
+```{r figCollapseItems}
+d.tidy.adj.itemMeans <- df.trials.tidy %>% 
+  ungroup() %>%
+  mutate(key = gsub('response_', "", key),
+         item_cond = factor(item_cond,
+                               levels = c("low", "medium", "high")),
+         key = factor(key, levels = c("neg", "pos"), labels = c("negative", "positive"))) %>%
+  group_by(degree, superordinate, item, item_cond, key) %>%
+  summarize(item_val = mean(val))
+  
+d.tidy.adj.bs.itemCI <- d.tidy.adj.itemMeans %>%
+  ungroup() %>%
+  group_by(item_cond, key) %>%
+  tidyboot_mean(column = item_val)
+
+d.tidy.adj.bs.itemCI %>%
+  ggplot(., 
+       aes( x = item_cond, y = mean, 
+            ymin = ci_lower, ymax = ci_upper, fill = key))+  
+  geom_col(position = position_dodge(0.8), width = 0.8, alpha = 0.4, color = 'black')+
+  geom_point(data = d.tidy.adj.itemMeans,
+           position = position_jitterdodge(),
+           inherit.aes = F, 
+            aes( x = item_cond, y = item_val, fill = key),
+           color = 'black', 
+           shape = 21,
+           alpha = 0.5) +
+  geom_linerange(position = position_dodge(0.8), color = 'black')+  
+  scale_fill_brewer(palette = "Set3")+
+  scale_color_brewer(palette = "Set3")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1.0, vjust = 1),
+        #axis.title.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.line = element_line(colour = "black"))+
+  guides(fill = guide_legend(reverse = T, title = "Adjective polarity"))+
+ # theme_black()+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  ylab("Proportion Endorsement")+
+  xlab("General Expectations for Subordinate Category")
+
+# ggsave("../analysis/figs/bars_cc_finalExpt_pilot.pdf",
+#        width = 5, height = 3.6)
+```
+
+
+# by item
+
+```{r figByItem}
+
+
+
+d.tidy.adj.bs.item <- df.trials.tidy %>% 
+  mutate(full_item = paste(degree, superordinate_pl, NP_sg, sep = "_")) %>%
+  group_by(degree, full_item, stim_id, superordinate_pl, NP_sg, np_expectations, adj_polarity) %>%
+  tidyboot_mean(column = val)
+
+d.tidy.adj.bs.item %>%
+  ungroup() %>%
+  mutate(#item_set = paste(degree, " (", superordinate, ")", sep = ""),
+         stim_id = paste("stim_", as.character(stim_id), sep = ""),
+         degree = factor(degree)) %>%
+  #group_by(item_set) %>%
+  mutate(NP_sg = fct_reorder(NP_sg, as.numeric(np_expectations))) -> d.tidy.adj.bs.item.reordered
+
+fac.levels <- levels(d.tidy.adj.bs.item.reordered$item)
+el.num <- which(fac.levels == "elephant")
+ch.num <- which(fac.levels == "cheetah")
+fac.levels[el.num] <- "cheetah"
+fac.levels[ch.num] <- "elephant"
+
+df.max.min.err <- read_csv(file = "../writing/paper/csv_data_4_tex/max_min_residiual_items.csv")
+
+inner_join(d.tidy.adj.bs.item.reordered, df.max.min.err) %>%
+  mutate(stim_id = fct_reorder(stim_id, as.numeric(degree))) %>%
+#   
+# d.tidy.adj.bs.item.reordered %>%
+#   mutate(item = factor(item, levels = fac.levels)) %>%
+ggplot(., 
+       aes( x = NP_sg, y = mean, 
+            ymin = ci_lower, ymax = ci_upper, fill = adj_polarity))+  
+  geom_col(position = position_dodge(0.8), width = 0.8, alpha = 0.7, color = 'black')+
+  geom_linerange(position = position_dodge(0.8), color = 'black')+  
+  scale_fill_brewer(palette = "Set3")+
+  theme(axis.text.x = element_text(angle = 30, hjust = 0.9, vjust = 0.9),
+        #axis.title.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.line = element_line(colour = "black"),
+        legend.position = 'bottom', legend.direction = 'horizontal')+
+  facet_wrap(~stim_id, scales = 'free', nrow = 1)+
+ # theme_black()+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  guides(fill = guide_legend(reverse = F, title = "Adjective polarity"))+
+  ylab("Proportion Endorsement")+
+  xlab("Subordinate Category")
+
+# ggsave("../analysis/figs/bars_adj_finalExpt_pilot_byItem.pdf",
+#        width = 12.5, height = 8.5)
+```
+
+# Regression modeling
+
+```{r}
+df.trials.tidy.fac <- df.trials.tidy %>%
+  mutate(adj_positiveness = factor(key, 
+                                   levels = c("response_neg", "response_pos"),
+                                   labels = c("negAdj", "posAdj")),
+         np_positiveness = factor(item_cond, 
+                                  levels = c("medium", "low", "high")),
+         item_set = paste(degree, "_", superordinate, sep = ""),
+         item_set = factor(item_set),
+         item = paste(degree, "_", superordinate, "_", item_cond, sep = ""),
+         item = factor(item),
+         workerid = factor(workerid))
+
+contrasts(df.trials.tidy.fac$adj_positiveness) <- c(-1/2, 1/2)
+
+
+rs.glm.brm.adj <- brm(
+  formula = val ~ np_positiveness * adj_positiveness + 
+    (1 +  np_positiveness*adj_positiveness | workerid) + 
+    (1 +  np_positiveness*adj_positiveness | item_set),
+  family = bernoulli(), 
+   chains = 3, cores = 3, iter = 1000, 
+  data = df.trials.tidy.fac)
+
+rs.glm.brm.adj.summary <-summary(rs.glm.brm.adj)
+
+contrasts(df.trials.tidy.fac$adj_positiveness)
+contrasts(df.trials.tidy.fac$np_positiveness)
+
+
+write_csv(data.frame(rs.glm.brm.adj.summary[["fixed"]]) %>% 
+            mutate(Rowname = row.names(.)), 
+          path = "../writing/paper/csv_data_4_tex/expt2_brm_pilot.csv")
+```
+
+
+```{r}
+rs.glm <- glmer(
+  formula = specific ~ np_positiveness * adj_positiveness + 
+    (1 | workerid) + 
+    (1| degree),
+  family = 'binomial', 
+  data = d.tidy.phrase.w.original.fac)
+
+summary(rs.glm)
+```
+
+
+# Comparison to comparison class inference
+
+```{r}
+load(file = "d_comparisonClass_specific_bs_item.RData") #d.tidy.phrase.specificMarking.bs.item
+
+
+glimpse(d.tidy.phrase.specificMarking.bs.item)
+
+d.cc.adj.bs.item <- d.tidy.phrase.specificMarking.bs.item %>%
+  mutate(full_item = paste(degree, "_", superordinate, "_", np, sep = "")) %>%
+  left_join(., 
+            d.tidy.adj.bs.item.reordered %>%
+              select(stim_id, item_cond, key, mean, ci_lower, ci_upper) %>%
+              rename(np_expectations = item_cond,
+                     adj_polarity = key,
+                     adj_mean = mean, 
+                     adj_lower = ci_lower,
+                     adj_upper = ci_upper))
+```
+
+```{r}
+glimpse(d.tidy.adj.bs.item.reordered)
+```
+
