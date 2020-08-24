@@ -1,2 +1,4 @@
 *.DS_Store
 data/task2_comparison-class-inference/old classifications
+analysis/*.rds
+analysis/task*json_to_csv.R
