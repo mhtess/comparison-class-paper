@@ -1,0 +1,910 @@
+stim_id,superordinate,np,adj,response,response_hand_lemma
+1,birds,crow,dark,colors,color
+1,birds,crow,light,colors,color
+1,birds,parrot,dark,colors,color
+1,birds,parrot,dark,colour,color
+1,birds,parrot,light,colors,color
+1,birds,seagull,dark,color,color
+1,birds,seagull,light,colors,color
+1,birds,seagull,light,colour,color
+2,paint,black paint,dark,cans,cans
+2,paint,black paint,dark,colors,color
+2,paint,black paint,light,colors,color
+2,paint,black paint,light,shades,shades
+2,paint,blue paint,dark,colors,color
+2,paint,blue paint,light,cans,cans
+2,paint,blue paint,light,colors,color
+2,paint,white paint,dark,colors,color
+2,paint,white paint,light,can,cans
+2,paint,white paint,light,colors,color
+2,paint,white paint,light,shades,shades
+3,cakes,cheesecake,dark,color,color
+3,cakes,cheesecake,dark,colors,color
+3,cakes,cheesecake,dark,colour,color
+3,cakes,cheesecake,dark,deserts,desserts
+3,cakes,cheesecake,dark,desserts,desserts
+3,cakes,cheesecake,dark,other desserts,desserts
+3,cakes,cheesecake,light,colors,color
+3,cakes,cheesecake,light,desserts,desserts
+3,cakes,cheesecake,light,desswerts,desserts
+3,cakes,chocolate cake,dark,colors,color
+3,cakes,fruit cake,dark,color,color
+3,cakes,fruit cake,light,colors,color
+3,cakes,fruit cake,light,desserts,desserts
+4,times of day,day,dark,places,places
+4,times of day,day,light,places,places
+4,times of day,dusk,dark,days,days
+4,times of day,dusk,dark,evenings,evenings
+4,times of day,dusk,dark,nights,night
+4,times of day,dusk,dark,places,places
+4,times of day,dusk,dark,places.,places
+4,times of day,dusk,light,days,days
+4,times of day,dusk,light,evenings,evenings
+4,times of day,dusk,light,nights,night
+4,times of day,night,dark,evenings,evenings
+4,times of day,night,dark,places,places
+4,times of day,night,light,places,places
+5,writing utensils,pen,dark,color,color
+5,writing utensils,pen,dark,colors,color
+5,writing utensils,pen,dark,color of the scripts,color of the scripts
+5,writing utensils,pen,dark,ink,ink
+5,writing utensils,pen,dark,inks,ink
+5,writing utensils,pen,dark,ink colors,ink color
+5,writing utensils,pen,dark,paper,paper
+5,writing utensils,pen,dark,script,scripts
+5,writing utensils,pen,dark,scripts,scripts
+5,writing utensils,pen,light,colors,color
+5,writing utensils,pen,light,ink,ink
+5,writing utensils,pen,light,inks,ink
+5,writing utensils,pen,light,ink colors,ink color
+5,writing utensils,pen,light,script,scripts
+5,writing utensils,pen,light,scripts,scripts
+5,writing utensils,pen,light,script colors,scripts color
+5,writing utensils,pen,light,scripts' colors,scripts color
+5,writing utensils,pencil,dark,colors,color
+5,writing utensils,pencil,dark,color of the script.,color of the scripts
+5,writing utensils,pencil,dark,ink,ink
+5,writing utensils,pencil,dark,scripts,scripts
+5,writing utensils,pencil,dark,scripts.,scripts
+5,writing utensils,pencil,dark,script color,scripts color
+5,writing utensils,pencil,dark,script colors,scripts color
+5,writing utensils,pencil,light,color,color
+5,writing utensils,pencil,light,colors,color
+5,writing utensils,pencil,light,color of the script,color of the scripts
+5,writing utensils,pencil,light,paper,paper
+5,writing utensils,pencil,light,papers,paper
+5,writing utensils,pencil,light,scipts,scripts
+5,writing utensils,pencil,light,script,scripts
+5,writing utensils,pencil,light,scripts,scripts
+5,writing utensils,pencil,light,script colors,scripts color
+5,writing utensils,piece of chalk,dark,color,color
+5,writing utensils,piece of chalk,dark,colors,color
+5,writing utensils,piece of chalk,dark,papers,paper
+5,writing utensils,piece of chalk,dark,script,scripts
+5,writing utensils,piece of chalk,dark,scripts,scripts
+5,writing utensils,piece of chalk,dark,script's colors,scripts color
+5,writing utensils,piece of chalk,light,color,color
+5,writing utensils,piece of chalk,light,colors,color
+5,writing utensils,piece of chalk,light,script,scripts
+5,writing utensils,piece of chalk,light,script colors,scripts color
+6,flowers,dahlia,dark,bouquet,bouquet
+6,flowers,dahlia,light,bouquets,bouquet
+6,flowers,dahlia,light,colors,color
+6,flowers,dahlia,light,flower bouquets,flower bouquet
+6,flowers,daisy,dark,bouquet,bouquet
+6,flowers,daisy,dark,flower bouquets,flower bouquet
+6,flowers,daisy,light,bouquet,bouquet
+6,flowers,daisy,light,bouquets,bouquet
+6,flowers,daisy,light,colors,color
+6,flowers,daisy,light,flower bouquet,flower bouquet
+6,flowers,rose,dark,bouquet,bouquet
+6,flowers,rose,dark,colors,color
+6,flowers,rose,light,bouqets,bouquet
+6,flowers,rose,light,bouquets,bouquet
+6,flowers,rose,light,colors,color
+7,dogs,pitbull,dark,coats,coats
+7,dogs,pitbull,dark,colors,color
+7,dogs,pitbull,dark,dog coats,dog coats
+7,dogs,pitbull,dark,dog's coats,dog coats
+7,dogs,pitbull,dark,fur,fur
+7,dogs,pitbull,light,coat colors,coat color
+7,dogs,pitbull,light,coats,coats
+7,dogs,pitbull,light,colors,color
+7,dogs,pitbull,light,dog coats,dog coats
+7,dogs,pitbull,light,fur,fur
+7,dogs,poodle,dark,coat,coat
+7,dogs,poodle,dark,coats,coats
+7,dogs,poodle,dark,colors,color
+7,dogs,poodle,dark,dog coats,dog coats
+7,dogs,poodle,light,coat,coat
+7,dogs,poodle,light,coats,coats
+7,dogs,poodle,light,colors,color
+7,dogs,poodle,light,dog coats,dog coats
+7,dogs,poodle,light,fur,fur
+7,dogs,spaniel,dark,coat,coat
+7,dogs,spaniel,dark,coat colors,coat color
+7,dogs,spaniel,dark,coats,coats
+7,dogs,spaniel,dark,colors,color
+7,dogs,spaniel,dark,dog coats,dog coats
+7,dogs,spaniel,dark,dog's coats,dog coats
+7,dogs,spaniel,dark,fur,fur
+7,dogs,spaniel,light,coat colors,coat color
+7,dogs,spaniel,light,coats,coats
+7,dogs,spaniel,light,colors,color
+7,dogs,spaniel,light,dog coats,dog coats
+7,dogs,spaniel,light,fur,fur
+8,animals,jaguar,dark,cats,cats
+8,animals,jaguar,dark,fur,fur
+8,animals,jaguar,dark,furs,fur
+8,animals,jaguar,dark,fur colors,fur color
+8,animals,jaguar,light,cats,cats
+8,animals,jaguar,light,color,color
+8,animals,jaguar,light,colors,color
+8,animals,jaguar,light,fur,fur
+8,animals,jaguar,light,furs,fur
+8,animals,jaguar,light,fur color,fur color
+8,animals,jaguar,light,fur colors,fur color
+8,animals,jaguar,light,fur colours,fur color
+8,animals,panther,dark,cats,cats
+8,animals,panther,dark,colors,color
+8,animals,panther,dark,fur,fur
+8,animals,panther,dark,furs,fur
+8,animals,panther,dark,fur colors,fur color
+8,animals,panther,light,color,color
+8,animals,panther,light,colors,color
+8,animals,panther,light,fur,fur
+8,animals,panther,light,furs,fur
+8,animals,panther,light,fur colors,fur color
+8,animals,tiger,dark,fur,fur
+8,animals,tiger,dark,furs,fur
+8,animals,tiger,light,color,color
+8,animals,tiger,light,colors,color
+8,animals,tiger,light,fur colors,fur color
+9,vegetables,cucumber,soft,fruits,fruit
+9,vegetables,tomato,hard,fruits,fruit
+9,vegetables,tomato,soft,fruits,fruit
+10,candies,jolly rancher,hard,foods,food
+10,candies,jolly rancher,soft,food,food
+10,candies,marshmallow,soft,food,food
+10,candies,marshmallow,soft,foods,food
+10,candies,piece of chocolate,hard,food,food
+10,candies,piece of chocolate,hard,other food,food
+10,candies,piece of chocolate,soft,food,food
+11,floors,carpet,hard,room,room
+11,floors,carpet,soft,rooms,room
+11,floors,tile,hard,room,room
+11,floors,wood,soft,rooms,room
+13,materials,cotton,hard,fabrics,fabric
+13,materials,cotton,soft,fabric,fabric
+13,materials,cotton,soft,fabrics,fabric
+13,materials,cotton,soft,items,items
+13,materials,cotton,soft,objects,objects
+13,materials,wood,hard,items,items
+13,materials,wood,hard,objects,objects
+13,materials,wood,soft,fabric,fabric
+14,furniture,bedboard,hard,beds,beds
+14,furniture,bedboard,hard,mattress,mattress
+14,furniture,bedboard,hard,mattresses,mattress
+14,furniture,bedboard,hard,places to sit,places to sit
+14,furniture,bedboard,hard,seats,seats
+14,furniture,bedboard,soft,beds,beds
+14,furniture,bedboard,soft,mattresses,mattress
+14,furniture,bedboard,soft,places to sit,places to sit
+14,furniture,blanket,hard,beds,beds
+14,furniture,blanket,hard,places to sit,places to sit
+14,furniture,blanket,hard,seats,seats
+15,animals,penguin,tall,birds,birds
+16,buildings,strip mall,short,mall,mall
+16,buildings,strip mall,short,malls,mall
+16,buildings,strip mall,short,malls.,mall
+16,buildings,strip mall,tall,mall,mall
+16,buildings,strip mall,tall,mall's,mall
+16,buildings,strip mall,tall,malls,mall
+17,people,adult,tall,children,kidren
+17,people,child,short,child,kid
+17,people,child,short,children,kidren
+17,people,child,short,kids,kids
+17,people,child,tall,child,kid
+17,people,child,tall,chijldren,kidren
+17,people,child,tall,children,kidren
+17,people,child,tall,children.,kidren
+17,people,child,tall,childs,kids
+17,people,teenager,short,kids,kids
+17,people,teenager,tall,children,kidren
+18,flowers,pansy,short,plants,plants
+18,flowers,pansy,tall,plants,plants
+18,flowers,sunflower,short,plants,plants
+18,flowers,sunflower,tall,plants,plants
+18,flowers,tulip,short,plants,plants
+19,people,basketball player,tall,athletes,athletes
+19,people,golfer,short,atheletes,athletes
+19,people,golfer,short,athletes,athletes
+19,people,golfer,tall,athletes,athletes
+19,people,jockey,short,athletes,athletes
+20,trees,alpine tree,tall,plants,plants
+20,trees,bonsai tree,short,plants,plants
+20,trees,bonsai tree,tall,plants,plants
+20,trees,redwood tree,tall,plants,plants
+22,pets,hamster,short,animals,animals
+22,pets,hamster,short,rodents,rodents
+22,pets,mouse,long,rodents,rodents
+22,pets,mouse,short,animals,animals
+22,pets,mouse,short,rodents,rodents
+22,pets,snake,long,animals,animals
+24,vehicles,limousine,long,cars,cars
+24,vehicles,limousine,short,car,cars
+24,vehicles,limousine,short,cars,cars
+24,vehicles,pick-up truck,long,cars,cars
+24,vehicles,pick-up truck,long,truck,trucks
+24,vehicles,pick-up truck,long,trucks,trucks
+24,vehicles,pick-up truck,long,trucks.,trucks
+24,vehicles,pick-up truck,short,truck,trucks
+24,vehicles,pick-up truck,short,trucks,trucks
+24,vehicles,smartcar,long,automobiles,cars
+24,vehicles,smartcar,long,car,cars
+24,vehicles,smartcar,long,cars,cars
+24,vehicles,smartcar,short,cars,cars
+25,entertainment,documentary,long,films,films
+25,entertainment,documentary,long,movies,movie
+25,entertainment,documentary,long,shows,shows
+25,entertainment,documentary,short,films,films
+25,entertainment,documentary,short,movies,movie
+25,entertainment,documentary,short,shows,shows
+25,entertainment,movie,short,films,films
+25,entertainment,sitcom,long,programs,programs
+25,entertainment,sitcom,long,shows,shows
+25,entertainment,sitcom,short,movie,movie
+25,entertainment,sitcom,short,movies,movie
+25,entertainment,sitcom,short,programs,programs
+25,entertainment,sitcom,short,shows,shows
+25,entertainment,sitcom,short,tv shows,tv shows
+26,roads,alley,long,streets,streets
+26,roads,alley,short,routes,routes
+26,roads,alley,short,streets,streets
+26,roads,highway,long,routes,routes
+26,roads,highway,short,distance,distance
+26,roads,highway,short,distances,distance
+26,roads,highway,short,routes,routes
+26,roads,street,long,routes,routes
+26,roads,street,short,distances,distance
+26,roads,street,short,routes,routes
+28,audios,opera,long,performances,performances
+28,audios,opera,long,songs,songs
+28,audios,opera,short,performances,performances
+28,audios,opera,short,songs,songs
+29,concerts,choral concert,loud,music,music
+29,concerts,choral concert,loud,noise,noise
+29,concerts,choral concert,loud,places,places
+29,concerts,choral concert,loud,sounds,sounds
+29,concerts,choral concert,quiet,music,music
+29,concerts,rap concert,loud,music,music
+29,concerts,rap concert,loud,places,places
+29,concerts,rock concert,loud,music,music
+29,concerts,rock concert,loud,noises,noise
+29,concerts,rock concert,loud,noises.,noise
+29,concerts,rock concert,loud,places,places
+29,concerts,rock concert,loud,sounds,sounds
+30,venue,church,noisy,buildings,buildings
+30,venue,church,noisy,environments,environment
+30,venue,church,noisy,places,places
+30,venue,church,quiet,buildings,buildings
+30,venue,church,quiet,indoor spaces,indoor spaces
+30,venue,church,quiet,locations,locations
+30,venue,church,quiet,places,places
+30,venue,conference center,noisy,buildings,buildings
+30,venue,conference center,noisy,centers,centers
+30,venue,conference center,noisy,environments,environment
+30,venue,conference center,noisy,locations,locations
+30,venue,conference center,noisy,places,places
+30,venue,conference center,noisy,rooms,room
+30,venue,conference center,quiet,buildings,buildings
+30,venue,conference center,quiet,centers,centers
+30,venue,conference center,quiet,locations,locations
+30,venue,conference center,quiet,places,places
+30,venue,conference center,quiet,rooms,room
+30,venue,party,noisy,indoor spaces,indoor spaces
+30,venue,party,noisy,locations,locations
+30,venue,party,noisy,places,places
+30,venue,party,noisy,rooms,room
+30,venue,party,quiet,buildings,buildings
+30,venue,party,quiet,environment,environment
+31,pets,cat,loud,animals,animals
+31,pets,cat,loud,sounds,sounds
+31,pets,cat,quiet,animals,animals
+31,pets,cat,quiet,places,places
+31,pets,fish,loud,places,places
+31,pets,fish,loud,sound,sounds
+31,pets,fish,quiet,animals,animals
+31,pets,fish,quiet,noises,noise
+31,pets,fish,quiet,place,places
+31,pets,fish,quiet,places,places
+31,pets,parrot,loud,animals,animals
+31,pets,parrot,loud,birds,birds
+31,pets,parrot,loud,places,places
+31,pets,parrot,loud,sounds,sounds
+31,pets,parrot,quiet,animals,animals
+31,pets,parrot,quiet,birds,birds
+31,pets,parrot,quiet,places,places
+32,venues,concert,noisy,buildings,buildings
+32,venues,concert,noisy,places,places
+32,venues,concert,noisy,saturday nights,saturday night
+32,venues,library,noisy,locations,locations
+32,venues,library,noisy,places,places
+32,venues,library,noisy,rooms,room
+32,venues,library,noisy,saturday nights,saturday night
+32,venues,library,quiet,buildings,buildings
+32,venues,library,quiet,locations,locations
+32,venues,library,quiet,places,places
+32,venues,library,quiet,rooms,room
+32,venues,restaurant,noisy,places,places
+32,venues,restaurant,quiet,places,places
+32,venues,restaurant,quiet,rooms,room
+32,venues,restaurant,quiet,saturday nights,saturday night
+33,birds,crow,loud,animals,animals
+33,birds,crow,loud,bird sounds,bird sounds
+33,birds,crow,loud,sound,sounds
+33,birds,crow,loud,sounds,sounds
+33,birds,crow,quiet,places,places
+33,birds,crow,quiet,sounds,sounds
+33,birds,finch,loud,animals,animals
+33,birds,finch,loud,noises,noise
+33,birds,finch,loud,sounds,sounds
+33,birds,finch,quiet,animals,animals
+33,birds,finch,quiet,places,places
+33,birds,rooster,loud,animals,animals
+33,birds,rooster,loud,noises,noise
+33,birds,rooster,loud,sounds,sounds
+33,birds,rooster,quiet,animals,animals
+33,birds,rooster,quiet,sounds,sounds
+34,instruments,guitar,loud,music,music
+34,instruments,guitar,loud,noise,noise
+34,instruments,guitar,loud,noises,noise
+34,instruments,guitar,loud,sounds,sounds
+34,instruments,guitar,quiet,music,music
+34,instruments,guitar,quiet,sounds,sounds
+34,instruments,harp,loud,noises,noise
+34,instruments,harp,loud,sounds,sounds
+34,instruments,harp,quiet,music,music
+34,instruments,harp,quiet,sounds,sounds
+34,instruments,horn,loud,noises,noise
+34,instruments,horn,loud,sounds,sounds
+34,instruments,horn,quiet,music,music
+35,people,adult,loud,noises,noise
+35,people,adult,quiet,rooms,room
+35,people,baby,loud,noises,noise
+35,people,baby,loud,rooms,room
+35,people,teenager,quiet,noises,noise
+35,people,teenager,quiet,rooms,room
+36,places,city,noisy,towns,towns
+36,places,town,quiet,cities,city
+36,places,village,noisy,towns,towns
+36,places,village,quiet,cities,city
+36,places,village,quiet,towns,towns
+37,vehicles,car,loud,sound,sounds
+37,vehicles,car,quiet,streets,streets
+37,vehicles,electric car,loud,car,cars
+37,vehicles,electric car,loud,cars,cars
+37,vehicles,electric car,quiet,car,cars
+37,vehicles,electric car,quiet,cars,cars
+37,vehicles,tractor,loud,sound,sounds
+37,vehicles,tractor,loud,sounds,sounds
+38,birds,mockingbird,loud,noises,noise
+38,birds,mockingbird,loud,places,places
+38,birds,mockingbird,loud,sounds,sounds
+38,birds,mockingbird,quiet,areas,areas
+38,birds,mockingbird,quiet,locations,locations
+38,birds,mockingbird,quiet,places,places
+38,birds,mockingbird,quiet,sounds in the forest,sounds in the forest
+38,birds,owl,loud,animals,animals
+38,birds,owl,loud,sounds in the forest,sounds in the forest
+38,birds,owl,quiet,animals,animals
+38,birds,owl,quiet,locations,locations
+38,birds,owl,quiet,places,places
+38,birds,owl,quiet,sounds in the forest,sounds in the forest
+38,birds,woodpecker,loud,noises,noise
+38,birds,woodpecker,loud,sounds,sounds
+38,birds,woodpecker,loud,sounds in the forest,sounds in the forest
+38,birds,woodpecker,quiet,areas.,areas
+38,birds,woodpecker,quiet,noises,noise
+38,birds,woodpecker,quiet,places,places
+38,birds,woodpecker,quiet,sounds,sounds
+39,boats,powerboat,loud,motors,motors
+39,boats,powerboat,loud,sounds,sounds
+39,boats,rowboat,loud,sounds,sounds
+39,boats,rowboat,quiet,motors,motors
+39,boats,rowboat,quiet,places,places
+39,boats,sailboat,loud,sound,sounds
+39,boats,sailboat,loud,sounds,sounds
+39,boats,sailboat,quiet,motors,motors
+39,boats,sailboat,quiet,places,places
+40,guitars,acoustic guitar,loud,inatruments,instruments
+40,guitars,acoustic guitar,loud,instruments,instruments
+40,guitars,acoustic guitar,loud,music,music
+40,guitars,acoustic guitar,loud,musical instruments,musical instruments
+40,guitars,acoustic guitar,loud,sounds,sounds
+40,guitars,acoustic guitar,quiet,instruments,instruments
+40,guitars,bass guitar,loud,instruments,instruments
+40,guitars,bass guitar,loud,musical instruments,musical instruments
+40,guitars,bass guitar,loud,sounds,sounds
+40,guitars,bass guitar,quiet,instruments,instruments
+40,guitars,bass guitar,quiet,music,music
+40,guitars,bass guitar,quiet,musical instruments,musical instruments
+40,guitars,bass guitar,quiet,stringed instruments,string instruments
+40,guitars,ukelele,loud,instruents,instruments
+40,guitars,ukelele,loud,instruments,instruments
+40,guitars,ukelele,loud,instruments.,instruments
+40,guitars,ukelele,loud,music,music
+40,guitars,ukelele,loud,musical instruments,musical instruments
+40,guitars,ukelele,loud,string instruments,string instruments
+40,guitars,ukelele,quiet,instruments,instruments
+40,guitars,ukelele,quiet,instruments.,instruments
+40,guitars,ukelele,quiet,instuments,instruments
+40,guitars,ukelele,quiet,music,music
+40,guitars,ukelele,quiet,musical instruments,musical instruments
+40,guitars,ukelele,quiet,string instuments,string instruments
+41,statues,bronze,cheap,decorations,decoration
+41,statues,bronze,cheap,materials,materials
+41,statues,bronze,cheap,metal,metal
+41,statues,bronze,expensive,decorations,decoration
+41,statues,bronze,expensive,items in the shop,items in the shop
+41,statues,bronze,expensive,metals,metal
+41,statues,plastic,cheap,decor,decoration
+41,statues,plastic,cheap,decorations,decoration
+41,statues,plastic,cheap,decors,decoration
+41,statues,plastic,cheap,materials,materials
+41,statues,plastic,expensive,decor,decoration
+41,statues,plastic,expensive,decorations,decoration
+41,statues,platinum,cheap,decor,decoration
+41,statues,platinum,cheap,decorations,decoration
+41,statues,platinum,cheap,materials,materials
+41,statues,platinum,cheap,metals,metal
+41,statues,platinum,expensive,decorations,decoration
+41,statues,platinum,expensive,items in the shop,items in the shop
+41,statues,platinum,expensive,materials,materials
+41,statues,platinum,expensive,metals,metal
+42,rentals,apartment,cheap,places,places
+42,rentals,apartment,cheap,places to live.,places to live
+42,rentals,apartment,expensive,homes,house
+42,rentals,apartment,expensive,house,house
+42,rentals,apartment,expensive,places,places
+42,rentals,apartment,expensive,places to live,places to live
+42,rentals,villa,cheap,homes,house
+42,rentals,villa,cheap,houses,house
+42,rentals,villa,cheap,places,places
+42,rentals,villa,cheap,places to live,places to live
+42,rentals,villa,expensive,homes,house
+42,rentals,villa,expensive,houses,house
+42,rentals,villa,expensive,places to live,places to live
+44,spices,garlic,cheap,prices,price
+44,spices,garlic,cheap,stores,shops
+44,spices,garlic,expensive,condiments,condiments
+44,spices,garlic,expensive,stores,shops
+44,spices,saffron,cheap,prices,price
+44,spices,saffron,expensive,condiments,condiments
+44,spices,saffron,expensive,price,price
+44,spices,saffron,expensive,products,product
+44,spices,salt,cheap,condiments,condiments
+44,spices,salt,cheap,prices,price
+44,spices,salt,cheap,products,product
+44,spices,salt,cheap,stores,shops
+44,spices,salt,expensive,products,product
+44,spices,salt,expensive,stores,shops
+45,bracelets,gold,cheap,jewelry,jewelry
+45,bracelets,gold,expensive,jewelry,jewelry
+45,bracelets,metal,cheap,jewelry,jewelry
+45,bracelets,metal,expensive,jewelery,jewelry
+45,bracelets,metal,expensive,jewelry,jewelry
+45,bracelets,plastic,cheap,jewelry,jewelry
+45,bracelets,plastic,expensive,jewelry,jewelry
+45,bracelets,plastic,expensive,jewlery,jewelry
+47,berries,boysenberries,cheap,fruit,fruit
+47,berries,boysenberries,cheap,fruits,fruit
+47,berries,boysenberries,expensive,foods,food
+47,berries,boysenberries,expensive,fruit,fruit
+47,berries,boysenberries,expensive,fruits,fruit
+47,berries,raspberries,cheap,fruit,fruit
+47,berries,raspberries,cheap,fruits,fruit
+47,berries,raspberries,cheap,stores,shops
+47,berries,raspberries,expensive,fruit,fruit
+47,berries,raspberries,expensive,fruits,fruit
+47,berries,raspberries,expensive,stores,shops
+47,berries,strawberries,cheap,fruit,fruit
+47,berries,strawberries,cheap,fruits,fruit
+47,berries,strawberries,cheap,stores,shops
+47,berries,strawberries,expensive,foods,food
+47,berries,strawberries,expensive,fruit,fruit
+47,berries,strawberries,expensive,fruits,fruit
+48,meat,chicken,cheap,butcher shops,butcher shops
+48,meat,chicken,cheap,food,food
+48,meat,chicken,cheap,foods,food
+48,meat,chicken,expensive,butcher shops,butcher shops
+48,meat,chicken,expensive,butchershops,butcher shops
+48,meat,chicken,expensive,food,food
+48,meat,pork,cheap,butchershops,butcher shops
+48,meat,pork,expensive,butchershops,butcher shops
+48,meat,steak,cheap,food,food
+48,meat,steak,expensive,butchershops,butcher shops
+48,meat,steak,expensive,food,food
+48,meat,steak,expensive,foods,food
+49,alcoholic drinks,bottle of top-shelf liquor,cheap,stores,shops
+49,alcoholic drinks,bottle of top-shelf liquor,expensive,bottles,bottles
+49,alcoholic drinks,bottle of wine,cheap,bottles,bottles
+49,alcoholic drinks,six-pack of beer,cheap,stores,shops
+49,alcoholic drinks,six-pack of beer,expensive,stores,shops
+50,restaurants,Chinese restaurant,cheap,dinner,dinner
+50,restaurants,Chinese restaurant,cheap,dinners,dinner
+50,restaurants,Chinese restaurant,cheap,food,food
+50,restaurants,Chinese restaurant,cheap,menu,menu
+50,restaurants,Chinese restaurant,cheap,menus,menu
+50,restaurants,Chinese restaurant,cheap,places for dinner,places for dinner
+50,restaurants,Chinese restaurant,cheap,restaurant prices,restaurant price
+50,restaurants,Chinese restaurant,expensive,dinner,dinner
+50,restaurants,Chinese restaurant,expensive,dinners,dinner
+50,restaurants,Japanese restaurant,cheap,dinner,dinner
+50,restaurants,Japanese restaurant,cheap,food,food
+50,restaurants,Japanese restaurant,cheap,menus,menu
+50,restaurants,Japanese restaurant,cheap,places for dinner,places for dinner
+50,restaurants,Japanese restaurant,expensive,dinner,dinner
+50,restaurants,Japanese restaurant,expensive,menus,menu
+50,restaurants,Japanese restaurant,expensive,restaurant prices,restaurant price
+50,restaurants,Korean restaurant,cheap,food,food
+50,restaurants,Korean restaurant,cheap,places for dinner,places for dinner
+50,restaurants,Korean restaurant,expensive,menu,menu
+50,restaurants,Korean restaurant,expensive,menus,menu
+50,restaurants,Korean restaurant,expensive,restaurant prices,restaurant price
+51,plants,bush,small,stores,shops
+51,plants,flower,big,stores,shops
+51,plants,tree,big,stores,shops
+54,fruit,kumquat,small,vegetables,vegetables
+54,fruit,watermelon,big,melons,melons
+55,fish,herring,big,animals,animals
+55,fish,herring,big,birds,birds
+55,fish,herring,small,animals,animals
+55,fish,herring,small,birds,birds
+55,fish,shark,big,animals,animals
+55,fish,shark,small,animals,animals
+56,vehicles,sedan,big,cars,cars
+56,vehicles,sedan,small,automobiles,cars
+56,vehicles,sedan,small,cars,cars
+56,vehicles,smartcar,big,cars,cars
+56,vehicles,smartcar,small,automobiles,cars
+56,vehicles,smartcar,small,car's,cars
+56,vehicles,smartcar,small,cars,cars
+56,vehicles,truck,big,cars,cars
+56,vehicles,truck,small,cars,cars
+59,people,jogger,fast,runners,runners
+59,people,jogger,slow,other runners,runners
+59,people,jogger,slow,runners,runners
+61,cookware,crockpot,quick,appliances,appliances
+61,cookware,crockpot,quick,cooking appliances,cooking appliances
+61,cookware,crockpot,quick,cooking methods,cooking methods
+61,cookware,crockpot,quick,dinners,dinner
+61,cookware,crockpot,quick,meals,meals
+61,cookware,crockpot,quick,methods of cooking,methods of cooking
+61,cookware,crockpot,quick,pots,pots
+61,cookware,crockpot,slow,appliances,appliances
+61,cookware,crockpot,slow,cooking methods,cooking methods
+61,cookware,crockpot,slow,cooking methods.,cooking methods
+61,cookware,crockpot,slow,meals,meals
+61,cookware,crockpot,slow,methods,methods
+61,cookware,crockpot,slow,methods of cooking,methods of cooking
+61,cookware,crockpot,slow,pots,pots
+61,cookware,frying pan,quick,cooking methods,cooking methods
+61,cookware,frying pan,quick,dinner,dinner
+61,cookware,frying pan,quick,dinners,dinner
+61,cookware,frying pan,quick,meals,meals
+61,cookware,frying pan,quick,methods,methods
+61,cookware,frying pan,quick,methods of cooking,methods of cooking
+61,cookware,frying pan,quick,pans,pans
+61,cookware,frying pan,quick,pots,pots
+61,cookware,frying pan,slow,cooking appliances,cooking appliances
+61,cookware,frying pan,slow,cooking methods,cooking methods
+61,cookware,frying pan,slow,dinner,dinner
+61,cookware,frying pan,slow,dinners,dinner
+61,cookware,frying pan,slow,pans,pans
+61,cookware,frying pan,slow,pots,pots
+61,cookware,frying pan,slow,stoves,stoves
+61,cookware,instant pot,quick,cooking appliances,cooking appliances
+61,cookware,instant pot,quick,cooking methods,cooking methods
+61,cookware,instant pot,quick,dinners,dinner
+61,cookware,instant pot,quick,meals,meals
+61,cookware,instant pot,quick,methods of cooking,methods of cooking
+61,cookware,instant pot,quick,pots,pots
+61,cookware,instant pot,slow,cooking methods,cooking methods
+61,cookware,instant pot,slow,methods,methods
+61,cookware,instant pot,slow,methods of cooking,methods of cooking
+61,cookware,instant pot,slow,pots,pots
+62,vehicles,car,fast,road,road
+62,vehicles,car,fast,traffic,traffic
+62,vehicles,car,slow,roads,road
+62,vehicles,motorcycle,fast,roads,road
+62,vehicles,motorcycle,slow,cars,cars
+62,vehicles,motorcycle,slow,traffic,traffic
+62,vehicles,truck,fast,cars,cars
+62,vehicles,truck,fast,traffic,traffic
+62,vehicles,truck,slow,cars,cars
+62,vehicles,truck,slow,traffic,traffic
+64,pets,cat,quick,animals,animals
+64,pets,cat,slow,animals,animals
+64,pets,rabbit,quick,animals,animals
+64,pets,rabbit,slow,animals,animals
+64,pets,turtle,slow,animals,animals
+65,people,adult,quick,walkers,walkers
+65,people,adult,quick,walks,walks
+65,people,adult,slow,person,person
+65,people,adult,slow,walkers,walkers
+65,people,child,quick,child,kid
+65,people,child,quick,children,kidren
+65,people,child,quick,kids,kids
+65,people,child,slow,child,kid
+65,people,child,slow,children,kidren
+65,people,child,slow,kids,kids
+65,people,child,slow,walkers,walkers
+65,people,elderly person,quick,person,person
+65,people,elderly person,quick,walkers,walkers
+65,people,elderly person,quick,walks,walks
+65,people,elderly person,slow,person,person
+65,people,elderly person,slow,walkers,walkers
+66,aircrafts,glider,fast,planes,plane
+66,aircrafts,glider,fast,things in the sky,things in the sky
+66,aircrafts,glider,slow,planes,plane
+66,aircrafts,helicopter,fast,things in the sky,things in the sky
+66,aircrafts,helicopter,fast,vehicles,vehicles
+66,aircrafts,helicopter,slow,planes,plane
+66,aircrafts,helicopter,slow,vehicles,vehicles
+66,aircrafts,plane,fast,vehicles,vehicles
+66,aircrafts,plane,slow,vehicles,vehicles
+67,people,child,strong,children,kidren
+67,people,child,strong,kids,kids
+67,people,child,weak,children,kidren
+67,people,teenager,strong,kids,kids
+68,storms,hurricane,strong,weather,weather
+68,storms,rain shower,strong,weather,weather
+68,storms,thunderstorm,strong,weather,weather
+69,athletes,cyclist,strong,human beings,people
+69,athletes,cyclist,strong,people,people
+69,athletes,cyclist,strong,person,person
+69,athletes,cyclist,weak,lifters,lifters
+69,athletes,cyclist,weak,people,people
+69,athletes,cyclist,weak,other weight lifters,weight lifters
+69,athletes,cyclist,weak,weight lifters,weight lifters
+69,athletes,cyclist,weak,weightlifters,weightlifters
+69,athletes,golfer,strong,people,people
+69,athletes,golfer,strong,person,person
+69,athletes,golfer,strong,weightlifters,weightlifters
+69,athletes,golfer,weak,people,people
+69,athletes,golfer,weak,weight lifters,weight lifters
+69,athletes,golfer,weak,weightlifters,weightlifters
+69,athletes,wrestler,strong,humans,people
+69,athletes,wrestler,strong,people,people
+69,athletes,wrestler,strong,person,person
+69,athletes,wrestler,strong,weight lifters,weight lifters
+69,athletes,wrestler,strong,weightlifters,weightlifters
+69,athletes,wrestler,weak,lifters,lifters
+69,athletes,wrestler,weak,people,people
+69,athletes,wrestler,weak,weight lifters,weight lifters
+69,athletes,wrestler,weak,weightlifters,weightlifters
+70,paints,oil paint,strong,colors,color
+70,paints,oil paint,strong,paint colors,paint color
+70,paints,oil paint,strong,smells,smells
+70,paints,oil paint,weak,paintings,paintings
+70,paints,wall paint,strong,colors,color
+70,paints,wall paint,strong,smells,smells
+70,paints,wall paint,weak,colors,color
+70,paints,wall paint,weak,paint colors,paint color
+70,paints,wall paint,weak,paint colours,paint color
+70,paints,wall paint,weak,paintings,paintings
+70,paints,watercolor,strong,colors,color
+70,paints,watercolor,weak,colors,color
+70,paints,watercolor,weak,paintings,paintings
+71,walls,condo,strong,structures,structures
+71,walls,condo,weak,buildings,buildings
+71,walls,mansion,strong,buildings,buildings
+71,walls,mansion,strong,houses,house
+71,walls,mansion,weak,building,buildings
+71,walls,mansion,weak,houses,house
+71,walls,mansion,weak,structures,structures
+72,food,ice cream,cold,days,days
+72,food,ice cream,cold,desserts,desserts
+72,food,ice cream,warm,days,days
+72,food,ice cream,warm,desserts,desserts
+72,food,salad,warm,dishes,dishes
+72,food,soup,cold,dishes,dishes
+72,food,soup,warm,dishes,dishes
+73,drinks,coffee,hot,liquids,liquids
+73,drinks,juice,cold,liquids,liquids
+73,drinks,juice,cold,temperatures,temperature
+73,drinks,juice,hot,liquids,liquids
+73,drinks,juice,hot,temperatures,temperature
+73,drinks,milkshake,cold,temperatures,temperature
+73,drinks,milkshake,hot,day,days
+73,drinks,milkshake,hot,days,days
+74,seasons,fall,cold,days,days
+74,seasons,fall,warm,day,days
+74,seasons,fall,warm,days,days
+74,seasons,fall,warm,weather,weather
+74,seasons,summer,cold,days,days
+74,seasons,summer,cold,weather,weather
+74,seasons,summer,warm,day,days
+74,seasons,summer,warm,days,days
+74,seasons,summer,warm,weather,weather
+74,seasons,winter,cold,days,days
+74,seasons,winter,cold,weather,weather
+74,seasons,winter,warm,days,days
+75,locations,freezer,cold,appliances,appliances
+75,locations,freezer,cold,places,places
+75,locations,freezer,cold,temperatures,temperature
+75,locations,freezer,warm,places,places
+75,locations,oven,warm,appliances,appliances
+75,locations,oven,warm,parts of the kitchen,parts of the kitchen
+75,locations,oven,warm,temperatures,temperature
+75,locations,pantry,cold,parts of the kitchen,parts of the kitchen
+75,locations,pantry,cold,places,places
+75,locations,pantry,cold,rooms,room
+75,locations,pantry,cold,temperatures,temperature
+75,locations,pantry,warm,parts of the kitchen,parts of the kitchen
+75,locations,pantry,warm,places,places
+75,locations,pantry,warm,rooms,room
+75,locations,pantry,warm,temperatures,temperature
+76,places,ice rink,cold,buildings,buildings
+76,places,ice rink,cold,days,days
+76,places,ice rink,cold,locations,locations
+76,places,ice rink,cold,rinks,rinks
+76,places,ice rink,cold,saturdays,saturday
+76,places,ice rink,cold,venues,venues
+76,places,ice rink,hot,buildings,buildings
+76,places,ice rink,hot,day's,days
+76,places,ice rink,hot,days,days
+76,places,ice rink,hot,rinks,rinks
+76,places,ice rink,hot,saturday's,saturday
+76,places,ice rink,hot,temperature,temperature
+76,places,ice rink,hot,venues,venues
+76,places,ice rink,hot,weather,weather
+76,places,sauna,cold,day,days
+76,places,sauna,cold,days,days
+76,places,sauna,cold,rooms,room
+76,places,sauna,cold,saturdays,saturday
+76,places,sauna,hot,days,days
+76,places,sauna,hot,locations,locations
+76,places,sauna,hot,rooms,room
+76,places,sauna,hot,temperatures.,temperature
+76,places,shopping mall,cold,buildings,buildings
+76,places,shopping mall,cold,days,days
+76,places,shopping mall,cold,other days,days
+76,places,shopping mall,cold,locations,locations
+76,places,shopping mall,cold,stores,shops
+76,places,shopping mall,cold,temperatures,temperature
+76,places,shopping mall,hot,buildings,buildings
+76,places,shopping mall,hot,day,days
+76,places,shopping mall,hot,days,days
+76,places,shopping mall,hot,locations,locations
+76,places,shopping mall,hot,temperatures,temperature
+76,places,shopping mall,hot,weather,weather
+77,food,chocolate fondue,cold,chocolate,chocolate
+77,food,chocolate fondue,cold,chocolates,chocolate
+77,food,chocolate fondue,cold,deserts,desserts
+77,food,chocolate fondue,cold,desserts,desserts
+77,food,chocolate fondue,cold,restaurants.,restaurants
+77,food,chocolate fondue,hot,chocholate,chocolate
+77,food,chocolate fondue,hot,chocolate,chocolate
+77,food,chocolate fondue,hot,chocolates,chocolate
+77,food,chocolate fondue,hot,desserts,desserts
+77,food,chocolate fondue,hot,drinks,drinks
+77,food,muffin,hot,desserts,desserts
+77,food,smoothie,cold,beverages,drinks
+77,food,smoothie,cold,drinks,drinks
+77,food,smoothie,cold,restaurants,restaurants
+77,food,smoothie,hot,days,days
+77,food,smoothie,hot,beverages,drinks
+77,food,smoothie,hot,drinks,drinks
+77,food,smoothie,hot,restaurants,restaurants
+79,people,adult,heavy,objects,objects
+79,people,baby,heavy,objects,objects
+79,people,baby,light,objects,objects
+79,people,kid,heavy,objects,objects
+80,electronic devices,laptop,heavy,objects,objects
+80,electronic devices,printer,heavy,objects,objects
+80,electronic devices,printer,heavy,other objects,objects
+80,electronic devices,printer,light,electronics,electronics
+81,furniture,chair,heavy,items,items
+81,furniture,chair,heavy,objects,objects
+81,furniture,couch,heavy,objects,objects
+81,furniture,couch,heavy,things,things
+81,furniture,trash can,heavy,items,items
+81,furniture,trash can,heavy,objects,objects
+81,furniture,trash can,heavy,things,things
+81,furniture,trash can,light,objects,objects
+81,furniture,trash can,light,things,things
+83,materials,cotton,heavy,cloths,clothes
+83,materials,cotton,heavy,fabric,fabric
+83,materials,cotton,heavy,fabrics,fabric
+83,materials,cotton,light,fabric,fabric
+83,materials,cotton,light,fabrics,fabric
+83,materials,cotton,light,objects,objects
+83,materials,silk,heavy,cloth,cloth
+83,materials,silk,heavy,clothes,clothes
+83,materials,silk,heavy,fabric,fabric
+83,materials,silk,heavy,fabrics,fabric
+83,materials,silk,light,cloth,cloth
+83,materials,silk,light,fabric,fabric
+83,materials,silk,light,fabrics,fabric
+83,materials,silk,light,other fabrics,fabric
+83,materials,wool,heavy,cloth,cloth
+83,materials,wool,heavy,clothes,clothes
+83,materials,wool,heavy,fabric,fabric
+83,materials,wool,heavy,fabrics,fabric
+83,materials,wool,light,cloth,cloth
+83,materials,wool,light,fabric,fabric
+83,materials,wool,light,fabrics,fabric
+84,vehicles,motorcycle,heavy,bikes,bikes
+84,vehicles,motorcycle,light,bikes,bikes
+84,vehicles,truck,heavy,automobiles,cars
+84,vehicles,truck,heavy,cars,cars
+85,fruit,orange,light,objects,objects
+85,fruit,plum,light,objects,objects
+85,fruit,watermelon,heavy,melons,melons
+85,fruit,watermelon,light,melons,melons
+86,dens,bear den,narrow,habitats,habitats
+86,dens,bear den,narrow,spaces,spaces
+86,dens,bear den,wide,habitats,habitats
+86,dens,bear den,wide,openings,openings
+86,dens,bear den,wide,spaces,spaces
+86,dens,fox den,narrow,burrows,holes
+86,dens,fox den,narrow,holes,holes
+86,dens,fox den,narrow,openings,openings
+86,dens,fox den,narrow,spaces,spaces
+86,dens,fox den,wide,holes,holes
+86,dens,mouse den,narrow,habitats,habitats
+86,dens,mouse den,narrow,holes,holes
+87,roads,downtown street,narrow,street,streets
+87,roads,downtown street,narrow,streets,streets
+87,roads,downtown street,wide,street,streets
+87,roads,downtown street,wide,streets,streets
+87,roads,highway,narrow,streets,streets
+87,roads,highway,wide,streets,streets
+87,roads,side road,narrow,streets,streets
+87,roads,side road,wide,streets,streets
+88,waterways,creek,narrow,bank,bank
+88,waterways,creek,narrow,banks,bank
+88,waterways,creek,narrow,bodies of water,bodies of water
+88,waterways,creek,narrow,rivers,rivers
+88,waterways,creek,wide,rivers,rivers
+88,waterways,river,narrow,banks,bank
+88,waterways,stream,narrow,bank,bank
+88,waterways,stream,narrow,bodys of water,bodies of water
+88,waterways,stream,narrow,rivers,rivers
+88,waterways,stream,wide,bank,bank
+88,waterways,stream,wide,banks,bank
+88,waterways,stream,wide,bodies of water,bodies of water
+88,waterways,stream,wide,rivers,rivers
+89,roads,boulevard,narrow,streets,streets
+89,roads,boulevard,narrow,walkways,walkways
+89,roads,boulevard,wide,streets,streets
+89,roads,boulevard,wide,walkways,walkways
+89,roads,country lane,narrow,lane,lane
+89,roads,country lane,narrow,lanes,lanes
+89,roads,country lane,narrow,streets,streets
+89,roads,country lane,wide,lane,lane
+89,roads,country lane,wide,lanes,lanes
+89,roads,country lane,wide,other streets,streets
+90,doorways,back door,narrow,doors,doors
+90,doorways,back door,narrow,house,house
+90,doorways,back door,wide,doors,doors
+90,doorways,back door,wide,furnitures,furniture
+90,doorways,back door,wide,houses,house
+90,doorways,back door,wide,pieces of furniture,pieces of furniture
+90,doorways,front gate,narrow,gate,gate
+90,doorways,front gate,narrow,gates,gate
+90,doorways,front gate,narrow,houses,house
+90,doorways,front gate,wide,furnitures,furniture
+90,doorways,front gate,wide,gate,gate
+90,doorways,front gate,wide,gates,gate
+90,doorways,front gate,wide,house,house
+90,doorways,front gate,wide,houses,house
+90,doorways,patio door,narrow,doors,doors
+90,doorways,patio door,narrow,house,house
+90,doorways,patio door,wide,doors,doors
+90,doorways,patio door,wide,furniture pieces,furniture
+90,doorways,patio door,wide,furnitures,furniture
+90,doorways,patio door,wide,pieces of furnature,pieces of furniture
+90,doorways,patio door,wide,pieces of furniture,pieces of furniture

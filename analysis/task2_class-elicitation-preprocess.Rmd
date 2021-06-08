@@ -43,9 +43,9 @@ containsString <- function(strng, substrng) {
 ## Load data
 
 ```{r load data from csv, warnings=F}
-df.trials <- read_csv("../../data/class-elicitation-prereg-final/class-elicitation-prereg-final-trials.csv")
-df.subject <- read_csv("../../data/class-elicitation-prereg-final/class-elicitation-prereg-final-subject_information.csv")
-df.attention <- read_csv("../../data/class-elicitation-prereg-final/class-elicitation-prereg-final-catch_trials.csv")
+df.trials <- read_csv("../data/task2_comparison-class-inference/class_inference-trials.csv")
+df.subject <- read_csv("../data/task2_comparison-class-inference/class_inference-subject_information.csv")
+df.attention <- read_csv("../data/task2_comparison-class-inference/class_inference-catch_trials.csv")
 ```
 
 ## Participant Exclusion 
@@ -205,65 +205,59 @@ n.total.responses - n.valid.responses
 
 Some responses fail to establish correct reference, e.g. participants referred to the wrong entity mentioned in the context sentence: given the sentence "John sees an adult lift a box" and the comment "John says: 'They're strong'", when asked who the adult is strong relative to, some subjects responded "relative to other boxes". Since these 'failed-reference' responses often mention distractor nouns in the context sentence, we extract these responses by looking for specific words from the contexts. 
 
+notes:
+- "forests": these were about birds being loud or quiet OR holes in the forest being wide or narrow. for the holes in the forest items, we allowed for responses that were spatial in nature (e.g., "holes in the forest"), but for the birds, we omitted spatial responses (e.g., "places in the forest") as that indicates reference failure (participants belived the referent was the 'part of the forest' as opposed to the bird)
+- "furniture" responses: a lot of these were in response to the "back door" / "front gate" sentences, which in retrospect were totally ambiguous (is it the furniture that is wide, or the gate?). for simplicitly, we omit these (47 omissions vs. 275 total responses)
+
 ``` {r}
-# remove responses failig to establish correct reference 
+
+incorrect.referent <- c("aquarium", "aquariums",
+  "box", "boxes","boxs",
+  "forest", "forests", "forests she's been in", 
+  "parts of the forest", "places in the forest",
+  "terrarium", "terrariums", "terrarium's", "insect terrariums",
+  "google maps", "google map", "map", "maps",
+  "kitchen", "kitchens",
+  "lake", "lakes")
+
+# remove responses that imply a different referent than intended
 d.tidy.resp.valid.FailedRef <- d.tidy.resp.valid %>%
   mutate(response = tolower(response)) %>%
   rowwise() %>%
-  mutate(failed_ref = FALSE,
-         failed_ref = ifelse(grepl("aquarium", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("bank", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("box", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("butchershops", response, fixed = T), TRUE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("butcher shops", response, fixed = T), TRUE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("butchershops' chickens", response, fixed = T),
-                             FALSE, failed_ref),
-         failed_ref = ifelse(grepl("bank", response, fixed = T), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("banks", response, fixed = T), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("creek banks", response, fixed = T), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("river banks", response, fixed = T), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("stream banks", response, fixed = T), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("forest", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("pieces of furniture", response), TRUE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("sounds in the forest", response), TRUE,
-                             failed_ref),
-         failed_ref = ifelse((grepl("furniture", response) & (stim_id == 90)),
-                             TRUE, failed_ref),
-         failed_ref = ifelse((grepl("night", response)& (stim_id == 32)),
-                             TRUE, failed_ref),
-         failed_ref = ifelse(grepl("saturday", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("terrarium", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("google maps", response), TRUE, failed_ref),
-         failed_ref = ifelse((grepl("highway", response) & (stim_id == 62)),
-                             TRUE, failed_ref),
-         failed_ref = ifelse(grepl("kitchen", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("items in the kitchen", response), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("kitchen appliances", response), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("kitchen cooking appliances", response), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("kitchenware", response), FALSE, failed_ref),
-         failed_ref = ifelse(grepl("lake", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("map", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("park", response), TRUE, failed_ref),
-         failed_ref = ifelse(grepl("sound", response), FALSE, failed_ref),
-         failed_ref = ifelse((grepl("weight", response)& (stim_id == 69)), TRUE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("weight lifters", response), FALSE,
-                             failed_ref),
-         failed_ref = ifelse(grepl("weightlifters", response), FALSE,
-                             failed_ref),
-  ) %>% filter((responseLength < 3) & # longer responses contain the target N
-               (failed_ref == TRUE) & 
-               (response != "pieces of furniture")
-               )
+  mutate(failed_ref = response %in% incorrect.referent | 
+          (superordinate == "fish" & response == "furniture") | 
+          (superordinate == "doorways" & response == "furniture") |
+          (superordinate == "animals" & response == "night") |
+          (superordinate == "birds" & response == "night") |
+          (superordinate == "venues" & 
+             response %in% c("night", "nights", "saturday nights", "Saturday nights") ) |
+          (superordinate == "places" & response %in% c("saturday", "saturdays")) |
+          (superordinate == "vehicles" & response %in% c("highway", "highways")) |
+          (superordinate == "venues" & response == "park") |
+          (superordinate == "birds" & response %in% c("park", "parks")) |
+          (superordinate == "athletes" & response %in% c("weight", "weights")) |
+          (superordinate == "writing utensils" & response %in% c("paper")) |
+
+  ) %>% filter(failed_ref)
+  # mutate(failed_ref = FALSE,
+  #        failed_ref = response %in% c("aquarium", "aquariums"),
+  #        failed_ref = response %in% c("box", "boxes","boxs"),
+  #        failed_ref = response %in% c("forest", "forests", "forests she's been in", "parts of the forest", "places in the forest"),
+  #        failed_ref = (superordinate == "fish" & response == "furniture") | 
+  #          (superordinate == "doorways" & response == "furniture"),
+  #        failed_ref = (superordinate == "animals" & response == "night") |
+  #            (superordinate == "birds" & response == "night") |
+  #           (superordinate == "venues" & response %in% c("night", "nights", "saturday nights", "Saturday nights") ),
+  #        failed_ref = (superordinate == "places" & response %in% c("saturday", "saturdays")),
+  #        failed_ref = response %in% c("terrarium", "terrariums", "terrarium's", "insect terrariums"),
+  #        failed_ref = response %in% c("google maps", "google map", "map", "maps"),
+  #        failed_ref = superordinate == "vehicles" & response %in% c("highway", "highways"),
+  #        failed_ref = response %in% c("kitchen", "kitchens"),
+  #        failed_ref = response %in% c("lake", "lakes"),
+  #        failed_ref = (superordinate == "venues" & response == "park") |
+  #          (superordinate == "birds" & response %in% c("park", "parks")),
+  #        failed_ref = (superordinate == "athletes" & response %in% c("weight", "weights"))
+  # ) %>% filter(failed_ref)
 ```
 
 ``` {r}
@@ -339,25 +333,23 @@ d.tidy.resp.valid.noFailedRef %>%
   ) %>%
   rowwise() %>%
   mutate( # ITEM-SPECIFIC SYNONYMS
-    response_synonym = ifelse(
-      (stim_id == 19 && response_synonym %in% c("player", "players", "ball players") && np == "basketball player"), "basketball players",
-      ifelse(
-        (stim_id == 19 && response_synonym %in% c("player", "players") && np == "jockey"), "jockeys",
-        ifelse(
-          (stim_id == 19 && response_synonym %in% c("player", "players") && np == "golfer"), "golfers",
-          ifelse(
-            (stim_id == 25 && response_synonym %in% c("episode", "episodes")),
-            "sitcom",
-            ifelse(stim_id == 28 && response_synonym %in% c("episode", "episodes"), "podcast episode",
-              ifelse(stim_id == 29 && response_synonym == "rock", "rock concert",
-                ifelse(stim_id == 81 && response_synonym == "cans", "trash can",
-                  response_synonym
-                )
-              )
-            )
-          )
-        )
-      )
+    response_synonym = case_when(
+      (np == "basketball player" &
+         response_synonym %in% 
+         c("player", "players", "ball players") ) ~ "basketball players",
+      (np == "jockey" & 
+         response_synonym %in% c("player", "players")) ~ "jockeys",
+      (np == "golfer" & 
+         response_synonym %in% c("player", "players")) ~ "golfers",
+      (np == "sitcom" &
+         response_synonym %in% c("episode", "episodes") ) ~ "sitcom",
+      (np == "podcast episode" & 
+         response_synonym %in% c("episode", "episodes")) ~ "podcast episode",
+      (np == "rock concert" & 
+        response_synonym == "rock") ~ "rock concert",
+      (np == "trash can" & 
+        response_synonym == "cans") ~ "trash cans",
+      TRUE ~ response_synonym
     )
   ) %>%
   ungroup() %>%
@@ -652,7 +644,7 @@ We extract frequecies of the plural NPs and the adjusted superordinates from the
 The corresponding subordinate and superordinate frequencies are added to each data point. 
 
 ```{r}
-df.frequencies <- read_csv("../../data/class-elicitation-prereg-final/class-elicitation-final-plural_frequencies.csv")
+df.frequencies <- read_csv("../data/task2_comparison-class-inference/old classifications/class-elicitation-final-plural_frequencies.csv")
 
 # d.tidy.auto.classified.w.pl.np <- d.tidy.auto.match.adjust_super %>%
 d.tidy.auto.freq <- d.tidy.auto %>%
@@ -701,8 +693,8 @@ d.tidy.auto.freq.clean <- d.tidy.auto.freq %>%
 ## Output CSVs
 
 ```{r}
-write_csv(d.tidy.auto.freq, 
-          path =  "../../data/class-elicitation-prereg-final/class-elicitation_auto-classified_frequencies2.csv")
+# write_csv(d.tidy.auto.freq, 
+#           path =  "../../data/class-elicitation-prereg-final/class-elicitation_auto-classified_frequencies2.csv")
 ```
 
 
@@ -761,7 +753,8 @@ d.tidy.auto.non_match.grab3 <- d.tidy.auto.non_match %>%
   filter(n >= 3)
 
 nrow(d.tidy.auto.non_match) - nrow(d.tidy.auto.non_match.grab3)
-(nrow(d.tidy.auto.non_match) - nrow(d.tidy.auto.non_match.grab3)) / nrow(d.tidy.auto.non_match)
+(nrow(d.tidy.auto.non_match.grab3)) / nrow(d.tidy.auto.non_match)
+
 ```
 
 
@@ -778,15 +771,26 @@ Most classifications are read from a dataframe and are classifications from a pr
 
 ``` {r manualCC}
 # look at distinct responses
-d.tidy.auto.non_match.grab3.noFailedRef %>%
-  distinct(stim_id, superordinate, np, adj, response_hand_lemma) %>%
-  View()
+d.tidy.auto.non_match.grab3 %>%
+  distinct(stim_id, superordinate, np, adj, response_hand_lemma, response) %>%
+  arrange(stim_id, superordinate, np, adj, response_hand_lemma, response) -> d.tidy.auto.non_match.grab3_distinct
 
-hand_cc_dict <- read_csv("text_processing/hand_comp_classes_dict.csv") %>%
-  rowwise() %>%
-  mutate(
-    hand_cc = ifelse(is.na(hand_cc), "NA", hand_cc)
-  )
+write_csv(d.tidy.auto.non_match.grab3_distinct,
+          "text_processing/non_match_distinct_atLeast3.csv")
+
+# hand_cc_dict <- read_csv("text_processing/hand_comp_classes_dict.csv") %>%
+#   rowwise() %>%
+#   mutate(
+#     hand_cc = ifelse(is.na(hand_cc), "NA", hand_cc)
+#   )
+
+hand_cc_dict <- read_csv("text_processing/non_match_distinct_atLeast3_labeled.csv")
+
+
+left_join(
+  d.tidy.auto.non_match.grab3,
+  hand_cc_dict
+) -> d.tidy.auto.non_match.grab3.2
 
 hand_cc_df <- pull(
   hand_cc_dict,
@@ -794,29 +798,49 @@ hand_cc_df <- pull(
 ) %>%
   set_names(pull(hand_cc_dict, hand_cc_lemma))
 
-d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.noFailedRef %>%
-  mutate(
-    hand_cc = str_replace_all(response_hand_lemma, hand_cc_df)
-  ) %>%
-  # rowwise() %>%
+
+# d.tidy.auto.non_match.grab3 %>% 
+
+
+# d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3 %>%
+#   mutate(
+#     hand_cc = str_replace_all(response_hand_lemma, hand_cc_df)
+#   ) %>%
+#   # rowwise() %>%
+  
+d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.2 %>%
   mutate(
     hand_cc =
       case_when(
         response_hand_lemma == "appliances" & stim_id == 61 ~ "supersuper",
         response_hand_lemma == "appliances" & stim_id == 75 ~ "diff",
+        response_hand_lemma == "bouquet" & stim_id == 6 ~ "super",
+        response_hand_lemma == "flower bouquet" & stim_id == 6 ~ "super",
+
         response_hand_lemma == "cans" & stim_id == 81 ~ "sub",
-        response_hand_lemma == "color" & stim_id == 2 ~ "supersuper",
+        response_hand_lemma == "child" & stim_id == 79 ~ "sub",
+        response_hand_lemma == "color of the scripts" & stim_id == 5 ~ "super",
         response_hand_lemma == "color" & stim_id == 70 ~ "diff",
         response_hand_lemma == "color" & stim_id == 2 ~ "supersuper",
+        response_hand_lemma == "city" & stim_id == 36 ~ "super",
         response_hand_lemma == "days" & stim_id == 76 ~ "diff",
         response_hand_lemma == "days" & stim_id == 77 ~ "diff",
         response_hand_lemma == "days" & stim_id == 72 ~ "diff",
         response_hand_lemma == "days" & stim_id == 73 ~ "diff",
+        response_hand_lemma ==  "decoration" & stim_id == 41 ~ "super", 
         response_hand_lemma == "desserts" & stim_id == 3 ~ "supersuper",
+        response_hand_lemma == "dinner" ~ "super", 
+        response_hand_lemma == "gate" & stim_id == 90 ~ "super",
+        response_hand_lemma == "items in the shop" ~ "super",
         response_hand_lemma == "fabric" & stim_id == 13 ~ "diff",
         response_hand_lemma == "food" & stim_id == 50 ~ "diff",
         response_hand_lemma == "fruit" & stim_id == 9 ~ "NA",
+        response_hand_lemma == "lane"  ~ "super",
         response_hand_lemma == "locations" & stim_id == 38 ~ "NA",
+        response_hand_lemma == "menu"  ~ "super",
+        response_hand_lemma == "parts of the kitchen" ~ "super",
+        response_hand_lemma == "pieces of furniture" ~ "NA",
+        response_hand_lemma == "places to sit" ~ "super",
         response_hand_lemma == "person" & stim_id == 69 ~ "supersuper",
         response_hand_lemma == "places" & stim_id == 4 ~ "diff",
         response_hand_lemma == "places" & stim_id == 38 ~ "NA",
@@ -824,11 +848,18 @@ d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.noFailedRef %>%
         response_hand_lemma == "places" & stim_id == 39 ~ "NA",
         response_hand_lemma == "places" & stim_id == 31 ~ "NA",
         response_hand_lemma == "places" & stim_id == 42 ~ "supersuper",
+        response_hand_lemma == "plane" ~ "super", 
+        response_hand_lemma == "restaurant price" ~ "super",
+        response_hand_lemma == "sounds in the forest" ~ "super",
+        response_hand_lemma == "things in the sky" ~ "super",
+        response_hand_lemma == "weight lifters" ~ "super",
         response_hand_lemma == "room" & stim_id == 75 ~ "NA",
         response_hand_lemma == "room" & stim_id == 35 ~ "NA",
         response_hand_lemma == "room" & stim_id == 11 ~ "NA",
         response_hand_lemma == "streets" & stim_id == 37 ~ "NA",
-        response_hand_lemma == "weather" & stim_id == 76 ~ "NA"
+        response_hand_lemma == "saturday" ~ "NA",
+        response_hand_lemma == "saturday night" ~ "NA",
+        response_hand_lemma == "weather" & stim_id == 76 ~ "NA",
         TRUE ~ hand_cc
       )
   )
@@ -837,6 +868,23 @@ d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.noFailedRef %>%
 d.auto.non_match.hand_cc.valid <- d.auto.non_match.hand_cc %>% filter(!(hand_cc == "NA"))
 
 # write_csv(d.auto.non_match.hand_cc.valid, "../data/class-elicitation-prereg-final/full-classified-data-w-hand-class.csv")
+```
+
+
+```{r}
+d.tidy.auto.non_match.grab3.2 %>%
+  ungroup() %>%
+  group_by(label) %>%
+  count() %>%
+  ungroup() %>%
+  mutate(prop = n/ sum(n))
+```
+
+```{r}
+d.auto.non_match.hand_cc %>%
+  filter(hand_cc == "NA") %>% 
+  # filter(is.na(hand_cc)) %>%
+  View()
 ```
 
 
