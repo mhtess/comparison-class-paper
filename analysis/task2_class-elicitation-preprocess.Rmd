@@ -224,22 +224,29 @@ incorrect.referent <- c("aquarium", "aquariums",
 d.tidy.resp.valid.FailedRef <- d.tidy.resp.valid %>%
   mutate(response = tolower(response)) %>%
   rowwise() %>%
-  mutate(failed_ref = response %in% incorrect.referent | 
+  mutate(failed_ref = ( response %in% incorrect.referent | 
           (superordinate == "fish" & response == "furniture") | 
-          (superordinate == "doorways" & response == "furniture") |
+          (superordinate == "doorways" & response %in% c("furniture", "furnitures", "peices of furniture", "pieces of furnature", "furniture pieces" )) |
           (superordinate == "animals" & response == "night") |
-          (superordinate == "birds" & response == "night") |
-          (superordinate == "venues" & 
-             response %in% c("night", "nights", "saturday nights", "Saturday nights") ) |
-          (superordinate == "places" & response %in% c("saturday", "saturdays")) |
-          (superordinate == "vehicles" & response %in% c("highway", "highways")) |
+          (superordinate == "boats" & response == "places") |
+          (superordinate == "vehicles" & response %in% c("highway", "highways", "streets", "road", "roads", "traffic")) |
           (superordinate == "venues" & response == "park") |
-          (superordinate == "birds" & response %in% c("park", "parks")) |
+          (superordinate == "birds" & response %in% c("night", "park", "parks", "places", "place", "areas", "locations")) |
           (superordinate == "athletes" & response %in% c("weight", "weights")) |
-          (superordinate == "writing utensils" & response %in% c("paper")) |
-
+          (superordinate == "writing utensils" & response %in% c("paper", "papers")) |
+          (superordinate == "pets" & response %in% c("places", "place")) | 
+          (superordinate == "people" & response == "rooms") |
+          (superordinate == "paints" & response %in% c("smells"))
+  )
   ) %>% filter(failed_ref)
-  # mutate(failed_ref = FALSE,
+  
+
+          # (superordinate == "venues" & 
+          #    response %in% c("night", "nights", "saturday nights", 
+          #                    "Saturday nights") ) |
+          # (superordinate == "places" & response %in% c("saturday", "saturdays")) |
+
+# mutate(failed_ref = FALSE,
   #        failed_ref = response %in% c("aquarium", "aquariums"),
   #        failed_ref = response %in% c("box", "boxes","boxs"),
   #        failed_ref = response %in% c("forest", "forests", "forests she's been in", "parts of the forest", "places in the forest"),
@@ -769,7 +776,35 @@ The by-response hand-classifications are put into the column 'hand_cc'.
 
 Most classifications are read from a dataframe and are classifications from a produced response (a string) to a categorization. Some of these judgments are adjective-NP (item) specific, and these are performed after reading the dataframe with `case_when`. 
 
-``` {r manualCC}
+
+```{r manual coding}
+hand_cc_dict <- read_csv("text_processing/non_match_distinct_atLeast3_labeled.csv")
+
+
+left_join(
+  d.tidy.auto.non_match.grab3,
+  hand_cc_dict
+) -> d.tidy.auto.non_match.grab3.2
+
+
+d.tidy.auto.non_match.grab3.2 %>%
+  ungroup() %>%
+  group_by(label) %>%
+  count() %>%
+  ungroup() %>%
+  mutate(prop = n/ sum(n))
+```
+
+```{r}
+# d.tidy.auto.non_match.grab3.2 %>%
+#   filter(label %in% c("diff", "reffail")) %>% 
+#   distinct(stim_id, superordinate, np, adj, response_hand_lemma, response, label) %>%
+#   arrange(stim_id, superordinate, np, adj, response_hand_lemma, response, label) %>%
+#   write_csv(.,
+#           "text_processing/non_match_distinct_atLeast3_diffOrReffail.csv")
+```
+
+``` {r create_manualCC}
 # look at distinct responses
 d.tidy.auto.non_match.grab3 %>%
   distinct(stim_id, superordinate, np, adj, response_hand_lemma, response) %>%
@@ -784,19 +819,19 @@ write_csv(d.tidy.auto.non_match.grab3_distinct,
 #     hand_cc = ifelse(is.na(hand_cc), "NA", hand_cc)
 #   )
 
-hand_cc_dict <- read_csv("text_processing/non_match_distinct_atLeast3_labeled.csv")
+# left_join(
+#   d.tidy.auto.non_match.grab3_distinct,
+#   hand_cc_dict
+# ) %>%
+#   write_csv("text_processing/non_match_distinct_atLeast3_labeled2.csv")
 
 
-left_join(
-  d.tidy.auto.non_match.grab3,
-  hand_cc_dict
-) -> d.tidy.auto.non_match.grab3.2
 
-hand_cc_df <- pull(
-  hand_cc_dict,
-  hand_cc
-) %>%
-  set_names(pull(hand_cc_dict, hand_cc_lemma))
+# hand_cc_df <- pull(
+#   hand_cc_dict,
+#   hand_cc
+# ) %>%
+#   set_names(pull(hand_cc_dict, hand_cc_lemma))
 
 
 # d.tidy.auto.non_match.grab3 %>% 
@@ -808,83 +843,66 @@ hand_cc_df <- pull(
 #   ) %>%
 #   # rowwise() %>%
   
-d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.2 %>%
-  mutate(
-    hand_cc =
-      case_when(
-        response_hand_lemma == "appliances" & stim_id == 61 ~ "supersuper",
-        response_hand_lemma == "appliances" & stim_id == 75 ~ "diff",
-        response_hand_lemma == "bouquet" & stim_id == 6 ~ "super",
-        response_hand_lemma == "flower bouquet" & stim_id == 6 ~ "super",
-
-        response_hand_lemma == "cans" & stim_id == 81 ~ "sub",
-        response_hand_lemma == "child" & stim_id == 79 ~ "sub",
-        response_hand_lemma == "color of the scripts" & stim_id == 5 ~ "super",
-        response_hand_lemma == "color" & stim_id == 70 ~ "diff",
-        response_hand_lemma == "color" & stim_id == 2 ~ "supersuper",
-        response_hand_lemma == "city" & stim_id == 36 ~ "super",
-        response_hand_lemma == "days" & stim_id == 76 ~ "diff",
-        response_hand_lemma == "days" & stim_id == 77 ~ "diff",
-        response_hand_lemma == "days" & stim_id == 72 ~ "diff",
-        response_hand_lemma == "days" & stim_id == 73 ~ "diff",
-        response_hand_lemma ==  "decoration" & stim_id == 41 ~ "super", 
-        response_hand_lemma == "desserts" & stim_id == 3 ~ "supersuper",
-        response_hand_lemma == "dinner" ~ "super", 
-        response_hand_lemma == "gate" & stim_id == 90 ~ "super",
-        response_hand_lemma == "items in the shop" ~ "super",
-        response_hand_lemma == "fabric" & stim_id == 13 ~ "diff",
-        response_hand_lemma == "food" & stim_id == 50 ~ "diff",
-        response_hand_lemma == "fruit" & stim_id == 9 ~ "NA",
-        response_hand_lemma == "lane"  ~ "super",
-        response_hand_lemma == "locations" & stim_id == 38 ~ "NA",
-        response_hand_lemma == "menu"  ~ "super",
-        response_hand_lemma == "parts of the kitchen" ~ "super",
-        response_hand_lemma == "pieces of furniture" ~ "NA",
-        response_hand_lemma == "places to sit" ~ "super",
-        response_hand_lemma == "person" & stim_id == 69 ~ "supersuper",
-        response_hand_lemma == "places" & stim_id == 4 ~ "diff",
-        response_hand_lemma == "places" & stim_id == 38 ~ "NA",
-        response_hand_lemma == "places" & stim_id == 29 ~ "supersuper",
-        response_hand_lemma == "places" & stim_id == 39 ~ "NA",
-        response_hand_lemma == "places" & stim_id == 31 ~ "NA",
-        response_hand_lemma == "places" & stim_id == 42 ~ "supersuper",
-        response_hand_lemma == "plane" ~ "super", 
-        response_hand_lemma == "restaurant price" ~ "super",
-        response_hand_lemma == "sounds in the forest" ~ "super",
-        response_hand_lemma == "things in the sky" ~ "super",
-        response_hand_lemma == "weight lifters" ~ "super",
-        response_hand_lemma == "room" & stim_id == 75 ~ "NA",
-        response_hand_lemma == "room" & stim_id == 35 ~ "NA",
-        response_hand_lemma == "room" & stim_id == 11 ~ "NA",
-        response_hand_lemma == "streets" & stim_id == 37 ~ "NA",
-        response_hand_lemma == "saturday" ~ "NA",
-        response_hand_lemma == "saturday night" ~ "NA",
-        response_hand_lemma == "weather" & stim_id == 76 ~ "NA",
-        TRUE ~ hand_cc
-      )
-  )
-
-# drop the invalid responses classified as "NA"
-d.auto.non_match.hand_cc.valid <- d.auto.non_match.hand_cc %>% filter(!(hand_cc == "NA"))
+# d.auto.non_match.hand_cc <- d.tidy.auto.non_match.grab3.2 %>%
+#   mutate(
+#     hand_cc =
+#       case_when(
+#         response_hand_lemma == "appliances" & stim_id == 61 ~ "supersuper",
+#         response_hand_lemma == "appliances" & stim_id == 75 ~ "diff",
+#         response_hand_lemma == "bouquet" & stim_id == 6 ~ "super",
+#         response_hand_lemma == "flower bouquet" & stim_id == 6 ~ "super",
+# 
+#         response_hand_lemma == "cans" & stim_id == 81 ~ "sub",
+#         response_hand_lemma == "child" & stim_id == 79 ~ "sub",
+#         response_hand_lemma == "color of the scripts" & stim_id == 5 ~ "super",
+#         response_hand_lemma == "color" & stim_id == 70 ~ "diff",
+#         response_hand_lemma == "color" & stim_id == 2 ~ "supersuper",
+#         response_hand_lemma == "city" & stim_id == 36 ~ "super",
+#         response_hand_lemma == "days" & stim_id == 76 ~ "diff",
+#         response_hand_lemma == "days" & stim_id == 77 ~ "diff",
+#         response_hand_lemma == "days" & stim_id == 72 ~ "diff",
+#         response_hand_lemma == "days" & stim_id == 73 ~ "diff",
+#         response_hand_lemma ==  "decoration" & stim_id == 41 ~ "super", 
+#         response_hand_lemma == "desserts" & stim_id == 3 ~ "supersuper",
+#         response_hand_lemma == "dinner" ~ "super", 
+#         response_hand_lemma == "gate" & stim_id == 90 ~ "super",
+#         response_hand_lemma == "items in the shop" ~ "super",
+#         response_hand_lemma == "fabric" & stim_id == 13 ~ "diff",
+#         response_hand_lemma == "food" & stim_id == 50 ~ "diff",
+#         response_hand_lemma == "fruit" & stim_id == 9 ~ "NA",
+#         response_hand_lemma == "lane"  ~ "super",
+#         response_hand_lemma == "locations" & stim_id == 38 ~ "NA",
+#         response_hand_lemma == "menu"  ~ "super",
+#         response_hand_lemma == "parts of the kitchen" ~ "super",
+#         response_hand_lemma == "pieces of furniture" ~ "NA",
+#         response_hand_lemma == "places to sit" ~ "super",
+#         response_hand_lemma == "person" & stim_id == 69 ~ "supersuper",
+#         response_hand_lemma == "places" & stim_id == 4 ~ "diff",
+#         response_hand_lemma == "places" & stim_id == 38 ~ "NA",
+#         response_hand_lemma == "places" & stim_id == 29 ~ "supersuper",
+#         response_hand_lemma == "places" & stim_id == 39 ~ "NA",
+#         response_hand_lemma == "places" & stim_id == 31 ~ "NA",
+#         response_hand_lemma == "places" & stim_id == 42 ~ "supersuper",
+#         response_hand_lemma == "plane" ~ "super", 
+#         response_hand_lemma == "restaurant price" ~ "super",
+#         response_hand_lemma == "sounds in the forest" ~ "super",
+#         response_hand_lemma == "things in the sky" ~ "super",
+#         response_hand_lemma == "weight lifters" ~ "super",
+#         response_hand_lemma == "room" & stim_id == 75 ~ "NA",
+#         response_hand_lemma == "room" & stim_id == 35 ~ "NA",
+#         response_hand_lemma == "room" & stim_id == 11 ~ "NA",
+#         response_hand_lemma == "streets" & stim_id == 37 ~ "NA",
+#         response_hand_lemma == "saturday" ~ "NA",
+#         response_hand_lemma == "saturday night" ~ "NA",
+#         response_hand_lemma == "weather" & stim_id == 76 ~ "NA",
+#         TRUE ~ hand_cc
+#       )
+#   )
+# 
+# # drop the invalid responses classified as "NA"
+# d.auto.non_match.hand_cc.valid <- d.auto.non_match.hand_cc %>% filter(!(hand_cc == "NA"))
 
 # write_csv(d.auto.non_match.hand_cc.valid, "../data/class-elicitation-prereg-final/full-classified-data-w-hand-class.csv")
-```
-
-
-```{r}
-d.tidy.auto.non_match.grab3.2 %>%
-  ungroup() %>%
-  group_by(label) %>%
-  count() %>%
-  ungroup() %>%
-  mutate(prop = n/ sum(n))
-```
-
-```{r}
-d.auto.non_match.hand_cc %>%
-  filter(hand_cc == "NA") %>% 
-  # filter(is.na(hand_cc)) %>%
-  View()
 ```
 
 
