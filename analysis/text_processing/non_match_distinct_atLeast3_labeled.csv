@@ -227,6 +227,9 @@ stim_id,superordinate,np,adj,response,response_hand_lemma,label
 22,pets,mouse,short,animals,animals,supersuper
 22,pets,mouse,short,rodents,rodents,diff
 22,pets,snake,long,animals,animals,supersuper
+23,readings,novel,long,books,books,intermediate
+23,readings,novel,short,books,books,intermediate
+23,readings,story,long,books,books,intermediate
 24,vehicles,limousine,long,cars,cars,intermediate
 24,vehicles,limousine,short,car,cars,intermediate
 24,vehicles,limousine,short,cars,cars,intermediate

@@ -1,7 +1,8 @@
 V1,V2
 6 packs,beer
 apartment,apartment building
-child,kid
+beverages,drinks
+showers,rain showers
 golf player,golfer
 six-packs,beer
 six-pack,beer
@@ -19,6 +20,7 @@ bicycle,bike
 car ride,drive
 brands of beer,beer
 mobile,cell
+fridges,refrigerator
 fridge,refrigerator
 gym,gymnasium
 players that play a different sport,athletes
@@ -145,3 +147,11 @@ ways to cook,cookware
 ways to cook a meal,cookware
 young adults,teenager
 trash,trash can
+animal homes,dens
+bicycles,bike
+homes,house
+conference rooms,conference center
+apartments,apartment building
+floorings,floors
+types of flooring,floors
+rinks,ice rink

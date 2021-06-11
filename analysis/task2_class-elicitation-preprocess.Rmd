@@ -299,6 +299,8 @@ In order to improve matching of the provided repsonses to the subordinate NPs or
 misspellings_df <- read_delim("text_processing/misspellings_dict.csv",
                             delim = ";")
 
+# names(misspellings_df) <- c("response_lower", "response_spelling")
+
 misspellings_set <- pull(misspellings_df, V2) %>% set_names(pull(misspellings_df, V1))
 ```
 
@@ -309,15 +311,11 @@ To further improve the response classification, we lemmatize the plural response
 
 ```{r list of lemmatizations}
 # mostly Plural --> singulars
-lemmatization_df <-  read_delim("text_processing/lemmatization_dict.csv",
-                                delim = ";") %>%
-  rowwise() %>%
-  mutate(
-    V2 = ifelse(is.na(V2), "",
-      V2
-    )
-  )
-lemmatization_set <- pull(lemmatization_df, V2) %>% set_names(pull(lemmatization_df, V1))
+lemmatization_df <-  read_csv("text_processing/lemmatization_dict.csv") 
+
+names(lemmatization_df) <- c("response_synonym", "response_lemma")
+
+# lemmatization_set <- pull(lemmatization_df, V2) %>% set_names(pull(lemmatization_df, V1))
 ```
 
 ### Synonym Extraction
@@ -325,37 +323,62 @@ lemmatization_set <- pull(lemmatization_df, V2) %>% set_names(pull(lemmatization
 To further improve the response classification, we also replace some raw responses which are obviously synonymous to the provided subordinate or superoridnate NPs given the context (e.g. 'automobile' is converted to 'car') .
 ```{r list of common synonyms}
 synonym_df <- read_csv("text_processing/synonym_dict.csv")
-synonym_set <- pull(synonym_df, V2) %>% set_names(pull(synonym_df, V1))
+
+names(synonym_df) <- c("response_spelling", "response_synonym")
+# synonym_set <- pull(synonym_df, V2) %>% set_names(pull(synonym_df, V1))
 ```
 
 ### Apply Text Corrections
-
-```{r apply corrections}
+```{r}
 d.tidy.resp.valid.noFailedRef %>%
   mutate(response = as.character(response)) %>%
   ungroup() %>%
+  left_join(lemmatization_df)
+```
+
+```{r apply corrections}
+d.tidy.resp.valid.noFailedRef %>%
+  mutate(response = as.character(response),
+         response_lower = tolower(response)) %>%
+  ungroup() %>%
   mutate(
-    response_spelling = str_replace_all(tolower(response), misspellings_set),
-    response_synonym = str_replace_all(response_spelling, synonym_set)
+    response_lower = gsub("[.]", "", response_lower),
+    response_spelling = str_replace_all(response_lower, misspellings_set)
+  ) %>%
+  left_join(
+    synonym_df
   ) %>%
   rowwise() %>%
   mutate( # ITEM-SPECIFIC SYNONYMS
     response_synonym = case_when(
       (np == "basketball player" &
-         response_synonym %in% 
+         response_spelling %in% 
          c("player", "players", "ball players") ) ~ "basketball players",
       (np == "jockey" & 
-         response_synonym %in% c("player", "players")) ~ "jockeys",
+         response_spelling %in% c("player", "players")) ~ "jockeys",
+      (np == "child" & 
+         response_spelling %in% c("kids")) ~ "child",
+      (np == "kid" & 
+         response_spelling %in% c("children", "child")) ~ "kids",
       (np == "golfer" & 
-         response_synonym %in% c("player", "players")) ~ "golfers",
+         response_spelling %in% c("player", "players")) ~ "golfers",
       (np == "sitcom" &
-         response_synonym %in% c("episode", "episodes") ) ~ "sitcom",
+         response_spelling %in% c("episode", "episodes") ) ~ "sitcom",
       (np == "podcast episode" & 
-         response_synonym %in% c("episode", "episodes")) ~ "podcast episode",
+         response_spelling %in% c("episode", "episodes")) ~ "podcast episode",
+      (np == "bottle of top-shelf liquor" & 
+         response_spelling == "bottles") ~ "bottle of top-shelf liquor",
+      (np == "bottle of wine" & 
+         response_spelling == "bottles") ~ "bottle of wine",
       (np == "rock concert" & 
-        response_synonym == "rock") ~ "rock concert",
+        response_spelling == "rock") ~ "rock concert",
       (np == "trash can" & 
-        response_synonym == "cans") ~ "trash cans",
+        response_spelling == "cans") ~ "trash cans",
+      (np == "dusk" &
+         response_spelling %in% c("evenings", "nights", "days") ) ~ "dusk",
+      (np == "night" &
+         response_spelling %in% c("evenings") ) ~ "night",
+      is.na(response_synonym) ~ response_spelling,
       TRUE ~ response_synonym
     )
   ) %>%
@@ -364,7 +387,7 @@ d.tidy.resp.valid.noFailedRef %>%
     response_lemma = tolower(str_replace_all(response_synonym, lemmatization_set))
   ) %>%
   mutate(
-    corrected_spelling = response != response_spelling,
+    corrected_spelling = response_lower != response_spelling,
     corrected_synonym = response_spelling != response_synonym,
     corrected_lemma = response_synonym != response_lemma
   ) -> d.tidy.resp.valid.lemmatized
@@ -807,11 +830,11 @@ d.tidy.auto.non_match.grab3.2 %>%
 ``` {r create_manualCC}
 # look at distinct responses
 d.tidy.auto.non_match.grab3 %>%
-  distinct(stim_id, superordinate, np, adj, response_hand_lemma, response) %>%
-  arrange(stim_id, superordinate, np, adj, response_hand_lemma, response) -> d.tidy.auto.non_match.grab3_distinct
+  distinct(stim_id, superordinate, np, adj, response_hand_lemma, response_spelling, response) %>%
+  arrange(stim_id, superordinate, np, adj, response_hand_lemma, response_spelling, response) -> d.tidy.auto.non_match.grab3_distinct
 
-write_csv(d.tidy.auto.non_match.grab3_distinct,
-          "text_processing/non_match_distinct_atLeast3.csv")
+# write_csv(d.tidy.auto.non_match.grab3_distinct,
+#           "text_processing/non_match_distinct_atLeast3.csv")
 
 # hand_cc_dict <- read_csv("text_processing/hand_comp_classes_dict.csv") %>%
 #   rowwise() %>%
@@ -819,11 +842,11 @@ write_csv(d.tidy.auto.non_match.grab3_distinct,
 #     hand_cc = ifelse(is.na(hand_cc), "NA", hand_cc)
 #   )
 
-# left_join(
-#   d.tidy.auto.non_match.grab3_distinct,
-#   hand_cc_dict
-# ) %>%
-#   write_csv("text_processing/non_match_distinct_atLeast3_labeled2.csv")
+left_join(
+  d.tidy.auto.non_match.grab3_distinct,
+  hand_cc_dict
+) %>%
+  write_csv("text_processing/_prelim_non_match_distinct_atLeast3_labeled3.csv")
 
 
 
