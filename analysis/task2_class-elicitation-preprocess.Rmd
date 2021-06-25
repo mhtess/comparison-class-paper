@@ -311,11 +311,13 @@ To further improve the response classification, we lemmatize the plural response
 
 ```{r list of lemmatizations}
 # mostly Plural --> singulars
-lemmatization_df <-  read_csv("text_processing/lemmatization_dict.csv") 
+lemmatization_df <-  read_csv("text_processing/lemmatization_dict.csv") %>%
+  mutate(V2 = ifelse(is.na(V2), "", V2)) 
 
-names(lemmatization_df) <- c("response_synonym", "response_lemma")
 
-# lemmatization_set <- pull(lemmatization_df, V2) %>% set_names(pull(lemmatization_df, V1))
+# names(lemmatization_df) <- c("response_synonym", "response_lemma")
+
+lemmatization_set <- pull(lemmatization_df, V2) %>% set_names(pull(lemmatization_df, V1))
 ```
 
 ### Synonym Extraction
@@ -498,8 +500,12 @@ d.tidy.resp.valid.lemmatized.keyword %>%
   # if the response is specific (subordinate), the modal NP is inserted, otherwise the modal superordinate is inserted
   mutate(mode_np = ifelse(specific == 1, np, superordinate)) -> d.tidy.auto
 
-with(d.tidy.auto, table(specific, matchingSuper)) %>% 
+with(d.tidy.auto, table(specific, matchingSuper)) -> d.auto.table
+
+
+d.auto.table %>% 
   kable()
+prop.table(d.auto.table)
 
 # d.tidy.auto %>% 
 #   select(response, response_lemma_us, keyword,  specific, superordinate, super_in_resp, response_lemma, super_us, resp_in_super, matchingSuper) %>%
@@ -517,6 +523,20 @@ n.automatic.responses <- d.tidy.auto.match %>%
 n.automatic.responses
 n.automatic.responses / n.valid.responses
 ```
+broken down by 3 x 2
+```{r}
+d.tidy.auto %>%
+  group_by(np_expectations, adj_polarity) %>%
+  summarize(
+    sub = sum(specific),
+    super = sum(matchingSuper),
+    other = sum(!specific & !matchingSuper),
+    psub = sub / n(),
+    psuper = super / n(),
+    pother = other / n()
+  )
+```
+
 
 Responses for items that were classified as all subordinate or superordinate (mean = 0 or 1) are double-checked.
 
@@ -720,13 +740,6 @@ d.tidy.auto.freq.clean <- d.tidy.auto.freq %>%
 ```
 
 
-## Output CSVs
-
-```{r}
-# write_csv(d.tidy.auto.freq, 
-#           path =  "../../data/class-elicitation-prereg-final/class-elicitation_auto-classified_frequencies2.csv")
-```
-
 
 Compare two files
 
@@ -783,6 +796,7 @@ d.tidy.auto.non_match.grab3 <- d.tidy.auto.non_match %>%
   filter(n >= 3)
 
 nrow(d.tidy.auto.non_match) - nrow(d.tidy.auto.non_match.grab3)
+nrow(d.tidy.auto.non_match.grab3)
 (nrow(d.tidy.auto.non_match.grab3)) / nrow(d.tidy.auto.non_match)
 
 ```
@@ -842,12 +856,12 @@ d.tidy.auto.non_match.grab3 %>%
 #     hand_cc = ifelse(is.na(hand_cc), "NA", hand_cc)
 #   )
 
-left_join(
-  d.tidy.auto.non_match.grab3_distinct,
-  hand_cc_dict
-) %>%
-  write_csv("text_processing/_prelim_non_match_distinct_atLeast3_labeled3.csv")
-
+# left_join(
+#   d.tidy.auto.non_match.grab3_distinct,
+#   hand_cc_dict
+# ) %>%
+#   write_csv("text_processing/_prelim_non_match_distinct_atLeast3_labeled3.csv")
+# 
 
 
 # hand_cc_df <- pull(
@@ -927,6 +941,20 @@ left_join(
 
 # write_csv(d.auto.non_match.hand_cc.valid, "../data/class-elicitation-prereg-final/full-classified-data-w-hand-class.csv")
 ```
+
+
+
+## Output CSVs
+
+
+```{r}
+# write_csv(d.tidy.auto.non_match.grab3.2, "../data/task2_comparison-class-inference/class-inference_handCategorizedOthers.csv")
+# 
+# write_csv(d.tidy.auto.freq, "../data/task2_comparison-class-inference/class-inference_preprocessed_noInvalid_noRefFail.csv")
+
+df.temp <- read_csv("../data/task2_comparison-class-inference/class-inference_handCategorizedOthers.csv")
+```
+
 
 
 ## Modal Superordinate Responses
