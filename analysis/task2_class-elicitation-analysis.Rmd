@@ -5,6 +5,8 @@ date: "6/11/2020"
 output: html_document
 ---
 
+# Libraries and load data 
+
 ```{r}
 library(tidyverse)
 library(tidyboot)
@@ -15,32 +17,16 @@ library(ggthemes)
 theme_set(theme_few())
 ```
 
-``` {r}
-# read data
-
-# whatever data needs to go into the regression model
-# uncomment below for automatically classified data only
-# data <- read_csv("../../data/class-elicitation-prereg-final/auto-classified-data-w-freqs-final.csv")
-# uncomment below for full classified data
-# data <- read_csv("../data/class-elicitation-prereg-final/full-classified-data-w-hand-class.csv")
-
-# automatically classified data, for viz
-# df.auto <- read_csv("../../data/class-elicitation-prereg-final/auto-classified-data-full-w-freqs-final.csv")
-
+```{r read data}
 df.auto <- read_csv("../data/task2_comparison-class-inference/class-inference_preprocessed_noInvalid_noRefFail.csv")
-
-# df.auto %>% 
-#   mutate(specific = as.numeric(specific)) %>%
-#   write_csv(., 
-#           path =  "../../data/class-elicitation-prereg-final/class-elicitation_auto-classified_frequencies.csv")
 ```
 
 
-## Descriptive stats
+# Descriptive stats
 
-### Corrections
+## Corrections
 
-```{r}
+```{r text corrections}
 df.auto %>%
   select(starts_with("corrected_")) %>%
   gather(key, val) %>%
@@ -49,20 +35,18 @@ df.auto %>%
             n = n(),
             prop = 100*total / n) -> df_corrections
 
-
-write_csv(df_corrections, "../../comparison-class/writing/paper/csv_data_4_tex/correction_counts.csv")
-
+df_corrections
+# write_csv(df_corrections, "../../comparison-class/writing/paper/csv_data_4_tex/correction_counts.csv")
 ```
 
 
-### Exact matches
+## Exact matches
 
 How many responses match the predefined superordinate category?
 How many match the subordinate category?
 How many neither?
 
-```{r}
-
+```{r exact matches}
 df.auto %>%
   group_by(specific, matchingSuper) %>%
   count() %>%
@@ -77,13 +61,12 @@ df.auto %>%
     prop = 100*n / total_n
     ) -> df_mentionSpecificCategoryCounts
 
-write_csv(df_mentionSpecificCategoryCounts, "../../comparison-class/writing/paper/csv_data_4_tex/mention_category_counts.csv")
+# write_csv(df_mentionSpecificCategoryCounts, "../../comparison-class/writing/paper/csv_data_4_tex/mention_category_counts.csv")
 
 matching.responses <- with(df.auto, table(specific, matchingSuper))
 
 prop.table(matching.responses) %>% 
   kable()
-
 ```
 
 ```{r}
@@ -104,83 +87,9 @@ n.automatic.responses / length(df.auto$response)
 
 # Visualisations
 
-```{r}
-count_summary_fn <- function(x) x %>% 
-  summarize(n = n()) %>%
-  mutate(stat = n / sum(n))
+**Don't run: Load results in next chunk** Bootstrapping condition and item means. 
 
-mean_ci_funs <- list("ci_lower" = ci_lower, "mean" = mean, "ci_upper" = ci_upper)
-
-df %>%
-  group_by(premise_1, premise_2, conclusion) %>%
-  tidyboot(summary_function = count_summary_fn,
-           statistics_functions = function(x) x %>%
-             summarise(across(stat, mean_ci_funs, .names = "{.fn}"))) %>%
-  ungroup() %>% 
-  rowwise() %>%
-  mutate(conclusion_quantifier = str_split(conclusion, ";")[[1]][1]) -> df.summ
-```
-
-
-```{r}
-d.tidy.3way.bs <- df.auto %>%
-  select(np_expectations, adj_polarity, specific, matchingSuper) %>%
-  mutate(
-    response_type = case_when(
-      specific == 1 ~ "subordinate",
-      matchingSuper ~ "modal superordinate", 
-      TRUE ~ "other superordinate"
-    )
-  ) %>%
-  group_by(np_expectations, adj_polarity, response_type) %>%
-  tidyboot(summary_function = count_summary_fn,
-           statistics_functions = function(x) x %>%
-             summarise(across(stat, mean_ci_funs, .names = "{.fn}"))) 
-
-
-
-
-d.tidy.3way.bs %>%
-  ungroup () %>%
-  mutate(
-    np_expectations = factor(np_expectations, levels = c("low", "medium", "high")),
-    response_type = factor(response_type, levels = c("subordinate", "modal superordinate", "other superordinate"))
-  ) %>%
-  ggplot(
-    .,
-    aes(
-      x = np_expectations, y = mean,
-      ymin = ci_lower, ymax = ci_upper, fill = response_type
-    )
-  ) +
-  geom_col(
-    position = position_dodge(0.8), width = 0.8, alpha = 0.7, color = "black", size = 1
-  ) +
-  geom_linerange(
-    position = position_dodge(0.8), color = "black", size = 1.5
-  ) +
-  scale_fill_brewer(palette = "Set2") +
-  theme(
-    panel.grid.minor = element_blank(),
-    panel.grid.major = element_blank(),
-    axis.line = element_line(colour = "black")
-  ) +
-  guides(fill = guide_legend(title = "Response Type", reverse = F)) +
-  # theme_black()+
-  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
-  ylab("Proportion of Responses") +
-  xlab("General Expectations of Subordinate Category")+
-  facet_wrap(~adj_polarity)
-
-
-ggsave(
-  filename = "../../comparison-class/writing/paper/figs/3way_bars_cc_finalExpt.pdf",
-  width = 7, height = 3.2
-)
-```
-
-
-```{r}
+```{r boostrap condition and item CIs, eval = F}
 d.tidy.phrase.specificMarking.bs <- df.auto %>%
   group_by(np_expectations, adj_polarity) %>%
   tidyboot_mean(column = specific)
@@ -207,10 +116,17 @@ d.tidy.phrase.specificMarking.bs.item %>%
     levels = c("low", "medium", "high")
   )) -> d.tidy.phrase.specificMarking.bs.item
 
-save(d.tidy.phrase.specificMarking.bs, 
-     d.tidy.phrase.specificMarking.bs.item, 
-     file = "../../writing/paper/cached_results/class-elicitation-bs-byItem-fullSet.RData")
-#load(file = "../../writing/paper/cached_results/class-elicitation-bs-byItem-fullSet.RData") # d.tidy.phrase.specificMarking.bs, d.tidy.phrase.specificMarking.bs.item, file =
+#save(d.tidy.phrase.specificMarking.bs, 
+#     d.tidy.phrase.specificMarking.bs.item, 
+#     file = "cached_results/class-elicitation-bs-byItem-fullSet.RData")
+```
+
+## Fig 3: Comparison Class Inference experimental results. 
+
+Proportion of paraphrases that contained the Subordinate NPs (e.g., basketball player) with which the referent was introduced, as a function of the general expectations listeners have about the category (x-axis) and the polarity of the adjective used to describe the category (e.g., tall = positive, short = negative). Bars represent overall means and error bar is a bootstrapped 95% confidence interval. Each dot represents the mean of a single item and lines connect Subordinate NPs described with different adjectives (e.g., tall and short basketball player). Dots are jittered horizontally to improve visual clarity.
+
+```{r}
+load(file = "cached_results/class-elicitation-bs-byItem-fullSet.RData") # d.tidy.phrase.specificMarking.bs, d.tidy.phrase.specificMarking.bs.item, file =
 
 set.seed(2020)
 
@@ -279,64 +195,19 @@ d.tidy.phrase.specificMarking.bs.item %>%
 # save(d.tidy.phrase.specificMarking.bs.item, file = "d_comparisonClass_specific_bs_item.RData")
 ```
 
-```{r}
-# look at data matched automatically by-item
-d.confident.phrase.specificMarking.bs.item <- auto_data %>%
-  # mutate() %>%
-  group_by(stim_id, degree, superordinate, np_expectations, np, adj_polarity) %>%
-  mean(specific)
+## Fig 4: By-item plots
 
-d.tidy.phrase.specificMarking.bs %>%
-  ungroup() %>%
-  mutate(
-    np_expectations = gsub('\"', "", np_expectations),
-    adj_polarity = gsub('\"', "", adj_polarity),
-    np_expectations = factor(np_expectations,
-      levels = c("low", "medium", "high")
-    )
-  ) %>%
-  ggplot(
-    .,
-    aes(
-      x = np_expectations, y = mean,
-      ymin = ci_lower, ymax = ci_upper, fill = adj_polarity
-    )
-  ) +
-  geom_col(position = position_dodge(0.8), width = 0.8, alpha = 0.6, color = "black", size = 1) +
-  geom_point(
-    position = position_jitterdodge(jitter.width = 0.2, jitter.height = 0),
-    data = d.tidy.phrase.specificMarking.bs.item,
-    aes(y = mean, fill = adj_polarity, x = np_expectations),
-    shape = 21, alpha = 0.8
-  ) +
-  geom_linerange(position = position_dodge(0.8), color = "black", size = 1) +
-  scale_fill_brewer(palette = "Set3") +
-  theme( # axis.text.x = element_text(angle = 45, hjust = 1.0, vjust = 1),
-    # axis.title.x = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major = element_blank(),
-    axis.line = element_line(colour = "black")
-  ) +
-  # theme_black()+
-  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
-  ylab("Proportion paraphrases that contain Specific NP") +
-  xlab("Subordinate Category General Expectations")
-
-# ggsave(filename = "../writing/paper/figs/bars_cc_finalExpt_prereg_bars.pdf",
-#        width = 6, height = 4)
-```
-
-## By-item plots
+Comparison class inference results for 24 of the 90 items. Two examples were selected from each unique degree scale; example items were those that exhibited the greatest and smallest variability in comparison class inferences.
 
 ```{r figIndivItems}
 select.items <- d.tidy.phrase.specificMarking.bs.item %>%
-  select(degree, np, stim_id, superordinate, np_expectations, adj_polarity, mean) %>%
+  select(degree, subordinate_sg, stim_id, superordinate_pl, np_expectations, adj_polarity, mean) %>%
   rowwise() %>%
   mutate(degree = first(strsplit(degree, "_")[[1]])) %>%
   spread(adj_polarity, mean) %>%
   mutate(delta = positive - negative) %>%
   ungroup() %>%
-  group_by(degree, stim_id, superordinate) %>%
+  group_by(degree, stim_id, superordinate_pl) %>%
   summarize(mean_delta = mean(abs(delta)))
 
 select.items %>%
@@ -368,16 +239,16 @@ d.tidy.phrase.specificMarking.bs.item %>%
     np_expectations = factor(np_expectations,
       levels = c("low", "medium", "high")
     ),
-    np = fct_reorder(np, as.numeric(np_expectations)),
-    item_set = paste(degree, " - ", superordinate, "-", stim_id, sep = ""),
-    item_name = paste(superordinate, " (", degree, ")", sep = ""),
+    subordinate_sg = fct_reorder(subordinate_sg, as.numeric(np_expectations)),
+    item_set = paste(degree, " - ", superordinate_pl, "-", stim_id, sep = ""),
+    item_name = paste(superordinate_pl, " (", degree, ")", sep = ""),
     item_name = factor(item_name),
     item_set = factor(item_set),
     item_name = fct_reorder(item_name, as.numeric(item_set))
   ) %>%
   ggplot(
     .,
-    aes(x = np, y = mean, fill = adj_polarity)
+    aes(x = subordinate_sg, y = mean, fill = adj_polarity)
   ) +
   geom_col(position = position_dodge(0.8), width = 0.8, alpha = 0.7, color = "black") +
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper),
@@ -399,13 +270,89 @@ d.tidy.phrase.specificMarking.bs.item %>%
   ylab("Proportion paraphrases that contain Specific NP") +
   xlab("Specific Category") #-> bars_cc_finalExpt_prereg_confident_byItem
 
-# ggsave("../analysis/figs/bars_cc_finalExpt_pilot_byItem.png",
-#        width = 9, height = 9)
-ggsave(
-  filename = "../writing/paper/figs/bars_cc_finalExpt_prereg_byItem.pdf",
-  width = 15, height = 10
-)
+# ggsave(
+#   filename = "../paper/figs/bars_cc_finalExpt_prereg_byItem.pdf",
+#   width = 15, height = 10
+# )
 ```
+
+## Fig S2: 3-way classification
+
+Proportion of responses under a three-way classification: mention subordinate, mention the modal superordinate response, or mention another, relatively superordinate category. For negative polarity adjectives, the proportion of both the “superordinate” and “other” responses increases as general expectations lower (and thus become more consistent with the adjective polarity; e.g., a short gymnast). For positive polarity adjectives, we see the reverse trend. Error-bars denote bootstrapped 95% CIs.
+
+```{r bootstrap 3way}
+count_summary_fn <- function(x) x %>% 
+  summarize(n = n()) %>%
+  mutate(stat = n / sum(n))
+
+mean_ci_funs <- list("ci_lower" = ci_lower, "mean" = mean, "ci_upper" = ci_upper)
+
+df %>%
+  group_by(premise_1, premise_2, conclusion) %>%
+  tidyboot(summary_function = count_summary_fn,
+           statistics_functions = function(x) x %>%
+             summarise(across(stat, mean_ci_funs, .names = "{.fn}"))) %>%
+  ungroup() %>% 
+  rowwise() %>%
+  mutate(conclusion_quantifier = str_split(conclusion, ";")[[1]][1]) -> df.summ
+
+d.tidy.3way.bs <- df.auto %>%
+  select(np_expectations, adj_polarity, specific, matchingSuper) %>%
+  mutate(
+    response_type = case_when(
+      specific == 1 ~ "subordinate",
+      matchingSuper ~ "modal superordinate", 
+      TRUE ~ "other superordinate"
+    )
+  ) %>%
+  group_by(np_expectations, adj_polarity, response_type) %>%
+  tidyboot(summary_function = count_summary_fn,
+           statistics_functions = function(x) x %>%
+             summarise(across(stat, mean_ci_funs, .names = "{.fn}"))) 
+```
+
+
+```{r fig s2}
+
+d.tidy.3way.bs %>%
+  ungroup () %>%
+  mutate(
+    np_expectations = factor(np_expectations, levels = c("low", "medium", "high")),
+    response_type = factor(response_type, levels = c("subordinate", "modal superordinate", "other superordinate"))
+  ) %>%
+  ggplot(
+    .,
+    aes(
+      x = np_expectations, y = mean,
+      ymin = ci_lower, ymax = ci_upper, fill = response_type
+    )
+  ) +
+  geom_col(
+    position = position_dodge(0.8), width = 0.8, alpha = 0.7, color = "black", size = 1
+  ) +
+  geom_linerange(
+    position = position_dodge(0.8), color = "black", size = 1.5
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.line = element_line(colour = "black")
+  ) +
+  guides(fill = guide_legend(title = "Response Type", reverse = F)) +
+  # theme_black()+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+  ylab("Proportion of Responses") +
+  xlab("General Expectations of Subordinate Category")+
+  facet_wrap(~adj_polarity)
+
+
+# ggsave(
+#   filename = "../paper/figs/3way_bars_cc_finalExpt.pdf",
+#   width = 7, height = 3.2
+# )
+```
+
 
 # Regression modeling
 
@@ -449,9 +396,11 @@ rs.glm.brm.summary <- summary(rs.glm.brm)
 rs.glm.brm.summary
 ```
 
-### compute marginal posteriors
+### Compute marginal posteriors
 
-```{r}
+**Don't run: Load results in next chunk** 
+
+```{r marginal posterior samples, eval = F}
 rs.glm.brm.betas.samples <- brms::posterior_samples(rs.glm.brm, add_chain = T) %>% 
   select(starts_with("b_")) %>%
   rename(
@@ -475,10 +424,13 @@ rs.glm.brm.betas.samples <- brms::posterior_samples(rs.glm.brm, add_chain = T) %
       0.5 * adjpol_nplow + 0.5 * adjpol_nphigh
   ) 
 
-write_csv(rs.glm.brm.betas.samples,
-          path = "../../writing/paper/cached_results/rs_brm_glm_exact-match_4chain_10k_samples2.csv")
+# write_csv(rs.glm.brm.betas.samples,
+#           path = "cached_results/rs_brm_glm_exact-match_4chain_10k_samples.csv")
+```
 
 
+```{r}
+rs.glm.brm.betas.samples <- read_csv("cached_results/rs_brm_glm_exact-match_4chain_10k_samples.csv")
 
 rs.glm.brm.betas.samples %>%
   gather(key, val) %>% 
@@ -491,8 +443,9 @@ rs.glm.brm.betas.samples %>%
     prob_lt_0 = mean(val < 0)*100
   ) -> rs.glm.brm.full.contrasts
 
-write_csv(rs.glm.brm.full.contrasts,
-          path = "../../writing/paper/csv_data_4_tex/expt_brm_exact-match_contrasts_10k_2.csv")
+rs.glm.brm.full.contrasts
+# write_csv(rs.glm.brm.full.contrasts,
+#           path = "../paper/csv_data_4_tex/expt_brm_exact-match_contrasts_10k_2.csv")
 ```
 
 
