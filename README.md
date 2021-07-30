@@ -1,4 +1,4 @@
-### Supporting materials for "Warm (for Winter): Inferring comparison classes for gradable adjectives"
+### Supporting materials for "Warm (for Winter): Inferring comparison classes in communication"
 
 - `analysis/`: preprocessing, visualization, and regression analyses in R
 - `data/`: raw and preprocessed data from the 3 experiments reported
